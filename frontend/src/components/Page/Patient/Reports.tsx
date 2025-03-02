@@ -1,9 +1,5 @@
 const ReportsPatient = () => {
-  return (
-    <div>
-      hi reports
-    </div>
-  )
-}
+  return <div>hi reports</div>;
+};
 
-export default ReportsPatient
+export default ReportsPatient;

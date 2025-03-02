@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Loader from "@/components/Loader";
-import axiosInstance from "@/lib/axiosInstance";
-import { Navigate, useNavigate } from "react-router-dom";
-import { useUserStore } from "@/components/store/userStore";
-import React, { ReactNode, useEffect, useState } from "react";
+import Loader from '@/components/Loader';
+import axiosInstance from '@/lib/axiosInstance';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { useUserStore } from '@/components/store/userStore';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 interface ProtectedHospitalProps {
   children: ReactNode;
@@ -16,14 +16,14 @@ const ProtectedPatient: React.FC<ProtectedHospitalProps> = ({ children }) => {
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) {
         setIsAuthenticated(false);
         return;
       }
 
       try {
-        const response = await axiosInstance.get("/patient/verifyPatient", {
+        const response = await axiosInstance.get('/patient/verifyPatient', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -32,12 +32,12 @@ const ProtectedPatient: React.FC<ProtectedHospitalProps> = ({ children }) => {
         if (response.status === 200) {
           setUser(response.data.data);
           setIsAuthenticated(true);
-            navigate("/too-fast");
+          navigate('/too-fast');
         } else {
           setIsAuthenticated(false);
         }
       } catch (error) {
-        console.error("Authentication check failed:", error);
+        console.error('Authentication check failed:', error);
         setIsAuthenticated(false);
       }
     };

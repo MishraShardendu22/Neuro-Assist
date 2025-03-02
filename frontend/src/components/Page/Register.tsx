@@ -1,9 +1,5 @@
 const Register = () => {
-  return (
-    <div>
-      Hi register
-    </div>
-  )
-}
+  return <div>Hi register</div>;
+};
 
-export default Register
+export default Register;

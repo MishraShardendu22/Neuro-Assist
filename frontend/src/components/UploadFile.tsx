@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
-import { PickerOverlay } from "filestack-react";
+import React from 'react';
+import { PickerOverlay } from 'filestack-react';
 
 const FileStack = () => {
   const apiKey = import.meta.env.VITE_FILESTACK_API_KEY as string;
@@ -11,42 +11,38 @@ const FileStack = () => {
 
   const options = {
     accept: [
-      ".pdf",
-      ".doc",
-      ".csv",
-      ".ppt",
-      ".txt",
-      ".xls",
-      ".pptx",
-      ".docx",
-      ".xlsx",
-      "image/*",
-      "video/*",
-      "image/png",
-      "image/jpeg",
+      '.pdf',
+      '.doc',
+      '.csv',
+      '.ppt',
+      '.txt',
+      '.xls',
+      '.pptx',
+      '.docx',
+      '.xlsx',
+      'image/*',
+      'video/*',
+      'image/png',
+      'image/jpeg',
     ],
-    fromSources: [
-      "url",
-      "camera",
-      "local_file_system",
-    ],
+    fromSources: ['url', 'camera', 'local_file_system'],
     transformations: {
       crop: true,
       circle: true,
-      rotate: true
+      rotate: true,
     },
     maxFiles: 5,
     storeTo: {
-      location: "s3"
-    }
+      location: 's3',
+    },
   };
 
   const onSuccess = (result: any) => {
-    console.log("Upload success:", result);
+    console.log('Upload success:', result);
   };
 
   const onError = (error: any) => {
-    console.error("Upload error:", error);
+    console.error('Upload error:', error);
   };
 
   return (

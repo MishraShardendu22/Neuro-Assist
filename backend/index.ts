@@ -21,8 +21,8 @@ const limiter = rateLimit({
   statusCode: 429,
   legacyHeaders: false,
   standardHeaders: true,
-  windowMs: 15 * 60 * 1000, 
-  message: { error: 'Too many requests, please try again later.'  },
+  windowMs: 15 * 60 * 1000,
+  message: { error: 'Too many requests, please try again later.' },
 });
 
 app.use(morgan('dev'));

@@ -24,67 +24,100 @@ const App = () => {
         <Route path="/" element={<Landing />} />
 
         {/* Login and Register */}
-        <Route path="/login" element={
-          <UnprotectedRoutes>
-            <Login />
-          </UnprotectedRoutes>
-        } />
-        <Route path="/register" element={
-          <UnprotectedRoutes>
-            <Register />
-          </UnprotectedRoutes>
-        } />
-        <Route path="/guidlines" element={
-          <UnprotectedRoutes>
-            <Guidlines />
-          </UnprotectedRoutes>
-        } />
+        <Route
+          path="/login"
+          element={
+            <UnprotectedRoutes>
+              <Login />
+            </UnprotectedRoutes>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <UnprotectedRoutes>
+              <Register />
+            </UnprotectedRoutes>
+          }
+        />
+        <Route
+          path="/guidlines"
+          element={
+            <UnprotectedRoutes>
+              <Guidlines />
+            </UnprotectedRoutes>
+          }
+        />
 
         {/* Patient */}
-        <Route path="/patient/home" element={
-          <ProtectedPatient>
-            <HomePatient />
-          </ProtectedPatient>
-        } />
-        <Route path="/patient/profile" element={
-          <ProtectedPatient>
-            <ProfilePatient />
-          </ProtectedPatient>
-        } />
-        <Route path="/patient/viewReports" element={
-          <ProtectedPatient>
-            <ReportsPatient />
-          </ProtectedPatient>
-        } />
+        <Route
+          path="/patient/home"
+          element={
+            <ProtectedPatient>
+              <HomePatient />
+            </ProtectedPatient>
+          }
+        />
+        <Route
+          path="/patient/profile"
+          element={
+            <ProtectedPatient>
+              <ProfilePatient />
+            </ProtectedPatient>
+          }
+        />
+        <Route
+          path="/patient/viewReports"
+          element={
+            <ProtectedPatient>
+              <ReportsPatient />
+            </ProtectedPatient>
+          }
+        />
 
         {/* Hospital */}
-        <Route path="/hospital/home" element={
-          <ProtectedHospital>
-            <HomeHospital />
-          </ProtectedHospital>
-        } />
+        <Route
+          path="/hospital/home"
+          element={
+            <ProtectedHospital>
+              <HomeHospital />
+            </ProtectedHospital>
+          }
+        />
 
-        <Route path="/too-fast" element={
-          <UnprotectedRoutes>
-            <Fast />
-          </UnprotectedRoutes>
-        } />
+        <Route
+          path="/too-fast"
+          element={
+            <UnprotectedRoutes>
+              <Fast />
+            </UnprotectedRoutes>
+          }
+        />
 
-        <Route path="/file-temp" element={
-          <UnprotectedRoutes>
-            <FileStack />
-          </UnprotectedRoutes>
-        } />
-        <Route path="/image-temp" element={
-          <UnprotectedRoutes>
-            <EditImages />
-          </UnprotectedRoutes>
-        } />
-        <Route path="*" element={
-          <UnprotectedRoutes>
-            <NotFound />
-          </UnprotectedRoutes>
-        } />
+        <Route
+          path="/file-temp"
+          element={
+            <UnprotectedRoutes>
+              <FileStack />
+            </UnprotectedRoutes>
+          }
+        />
+        <Route
+          path="/image-temp"
+          element={
+            <UnprotectedRoutes>
+              <EditImages />
+            </UnprotectedRoutes>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <UnprotectedRoutes>
+              <NotFound />
+            </UnprotectedRoutes>
+          }
+        />
       </Routes>
       <div className="relative min-h-screen">
         <Theme />
