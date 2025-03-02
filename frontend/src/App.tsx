@@ -1,3 +1,4 @@
+import Layout from './Layout';
 import Theme from './components/Theme';
 import Fast from './components/Page/Fast';
 import Login from './components/Page/Login';
@@ -6,8 +7,10 @@ import { Route, Routes } from 'react-router-dom';
 import Register from './components/Page/Register';
 import NotFound from './components/Page/Not-Found';
 import Guidlines from './components/Page/Guidlines';
+import FileStack from './components/Page/Temp/FileStack';
 import HomePatient from './components/Page/Patient/Home';
 import HomeHospital from './components/Page/Hospital/Home';
+import EditImages from './components/Page/Temp/EditImages';
 import ReportsPatient from './components/Page/Patient/Reports';
 import ProfilePatient from './components/Page/Patient/Profile';
 import ProtectedPatient from './components/Routes/protected/patient.route';
@@ -16,7 +19,7 @@ import ProtectedHospital from './components/Routes/protected/hospital.route';
 
 const App = () => {
   return (
-    <div>
+    <Layout>
       <Routes>
         <Route path="/" element={<Landing />} />
 
@@ -67,6 +70,16 @@ const App = () => {
           </UnprotectedRoutes>
         } />
 
+        <Route path="/file-temp" element={
+          <UnprotectedRoutes>
+            <FileStack />
+          </UnprotectedRoutes>
+        } />
+        <Route path="/image-temp" element={
+          <UnprotectedRoutes>
+            <EditImages />
+          </UnprotectedRoutes>
+        } />
         <Route path="*" element={
           <UnprotectedRoutes>
             <NotFound />
@@ -76,7 +89,7 @@ const App = () => {
       <div className="relative min-h-screen">
         <Theme />
       </div>
-    </div>
+    </Layout>
   );
 };
 
