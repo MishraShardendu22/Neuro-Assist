@@ -19,14 +19,14 @@ export const HospitalMiddleware = (req: Request, res: Response, next: NextFuncti
       }
 
       const decodedToken = decoded as { _id: string; role: string };
-      req.body._id = decodedToken._id;
+      req.body.hospitalId = decodedToken._id;
       req.body.role = decodedToken.role;
 
       if ((decoded as { role: string }).role !== 'Hospital') {
         apiResponse(res, 401, 'Unauthorized');
       }
 
-      if (req.body._id === undefined || req.body.role === undefined) {
+      if (req.body.hospitalId === undefined || req.body.role === undefined) {
         apiResponse(res, 403, 'Forbidden');
       }
     });

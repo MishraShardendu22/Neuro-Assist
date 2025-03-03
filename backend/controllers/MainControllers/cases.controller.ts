@@ -5,8 +5,7 @@ import { Case, Hospital, Patient } from '../../model';
 
 const postCase = async (req: Request, res: Response) => {
   try {
-    const hospitalId = req.params.id;
-    const { patientId } = req.body;
+    const { hospitalId, patientId } = req.body;
 
     if (!patientId || !hospitalId) {
       return apiResponse(res, 400, 'All fields are required');
@@ -40,9 +39,10 @@ const postCase = async (req: Request, res: Response) => {
 
 const getAllCases = async (req: Request, res: Response) => {
   try {
-    const hospitalId = req.params.id;
-    const hospitalExist = await Hospital.findById(hospitalId).populate('cases');
+    const { hospitalId } = req.body; // Ensure hospitalId is required in the request body
+    if (!hospitalId) return apiResponse(res, 400, 'Hospital ID is required');
 
+    const hospitalExist = await Hospital.findById(hospitalId).populate('cases');
     if (!hospitalExist) {
       return apiResponse(res, 404, 'Hospital does not exist');
     }
@@ -56,8 +56,12 @@ const getAllCases = async (req: Request, res: Response) => {
 
 const getUniqueCase = async (req: Request, res: Response) => {
   try {
-    const caseId = req.params.id;
-    const caseExist = await Case.findById(caseId);
+    const { hospitalId } = req.body;
+    const { id: caseId } = req.params;
+
+    if (!hospitalId) return apiResponse(res, 400, 'Hospital ID is required');
+
+    const caseExist = await Case.findOne({ _id: caseId, hospitalId });
     if (!caseExist) {
       return apiResponse(res, 404, 'Case does not exist');
     }
@@ -71,10 +75,14 @@ const getUniqueCase = async (req: Request, res: Response) => {
 
 const deleteCase = async (req: Request, res: Response) => {
   try {
-    const caseId = req.params.id;
-    const deletedCase = await Case.findByIdAndDelete(caseId);
+    const { hospitalId } = req.body;
+    const { id: caseId } = req.params;
 
-    if (!deletedCase) {
+    if (!hospitalId) return apiResponse(res, 400, 'Hospital ID is required');
+
+    const deletedCase = await Case.deleteOne({ _id: caseId, hospitalId });
+
+    if (deletedCase.deletedCount === 0) {
       return apiResponse(res, 404, 'Case does not exist');
     }
 
@@ -87,15 +95,14 @@ const deleteCase = async (req: Request, res: Response) => {
 
 const updateCase = async (req: Request, res: Response) => {
   try {
-    const caseId = req.params.id;
-    const { status } = req.body;
+    const { hospitalId, status } = req.body;
+    const { id: caseId } = req.params;
 
-    if (!status) {
-      return apiResponse(res, 400, 'Status is required');
-    }
+    if (!hospitalId) return apiResponse(res, 400, 'Hospital ID is required');
+    if (!status) return apiResponse(res, 400, 'Status is required');
 
-    const updatedCase = await Case.findByIdAndUpdate(
-      caseId,
+    const updatedCase = await Case.findOneAndUpdate(
+      { _id: caseId, hospitalId },
       { status },
       { new: true }
     );

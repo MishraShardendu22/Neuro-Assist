@@ -77,9 +77,9 @@ const login = async (req: Request, res: Response) => {
 
 const verifyHospital = async (req: Request, res: Response) => {
   try {
-    const { _id } = req.body;
+    const { hospitalId } = req.body;
 
-    const hospitalExist = await Hospital.findById(_id);
+    const hospitalExist = await Hospital.findById(hospitalId);
     if (!hospitalExist) {
       return apiResponse(res, 404, 'Hospital does not exist');
     }
@@ -99,12 +99,12 @@ const emergencyActivate = async (req: Request, res: Response) => {
     const {
       caseId,
       patientId,
-      documentId = 'N/A',
-      timeOfLastNormal = new Date(),
-      symptoms = ['N/A'],
       BP = 'N/A',
       HR = 'N/A',
+      symptoms = ['N/A'],
+      documentId = 'N/A',
       O2_Saturation = 'N/A',
+      timeOfLastNormal = new Date(),
     } = req.body;
 
     if (!caseId || !patientId) {

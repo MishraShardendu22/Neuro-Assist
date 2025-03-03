@@ -4,8 +4,7 @@ import { apiResponse } from '../../util/apiReponse';
 
 const postReport = async (req: Request, res: Response) => {
   try {
-    const { caseId, patientId, documentId, timeOfLastNormal, symptoms, BP, HR, O2_Saturation } =
-      req.body;
+    const { caseId, patientId, documentId, timeOfLastNormal, symptoms, BP, HR, O2_Saturation } = req.body;
 
     if (!caseId || !patientId || !documentId || !timeOfLastNormal || !symptoms || !BP || !HR || !O2_Saturation) {
       return apiResponse(res, 400, 'All fields are required');

@@ -5,7 +5,7 @@ import { apiResponse } from '../../util/apiReponse';
 
 const getAllNotification = async (req: Request, res: Response) => {
   try {
-    const hospitalId = req.body._id;
+    const hospitalId = req.body.hospitalId;
     const notifications = await Notification.findOne({ hospitalId });
 
     if (!notifications || !notifications.notifications.length) {
@@ -20,7 +20,7 @@ const getAllNotification = async (req: Request, res: Response) => {
 
 const postNotification = async (req: Request, res: Response) => {
   try {
-    const hospitalId = req.body._id;
+    const hospitalId = req.body.hospitalId;
     const { notification } = req.body;
 
     if (!notification) {
