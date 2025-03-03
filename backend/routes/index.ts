@@ -1,12 +1,19 @@
 import { Router } from 'express';
-import { GeneralRouter } from './MainRoutes/general.route';
+import { CasesRouter } from './MainRoutes/case.route';
+import { ReportsRouter } from './MainRoutes/report.route';
 import { PatientRouter } from './MainRoutes/patient.route';
 import { HospitalRouter } from './MainRoutes/hospital.route';
+import { DocumentsRouter } from './MainRoutes/document.route';
+import { GeneralRouter } from './MainRoutes/notification.route';
+
 
 const AllRouter = Router();
 
+AllRouter.use('/cases', CasesRouter);
 AllRouter.use('/patient', PatientRouter);
+AllRouter.use('/reports', ReportsRouter);
 AllRouter.use('/hospital', HospitalRouter);
+AllRouter.use('/documents', DocumentsRouter);
 AllRouter.use('/notification', GeneralRouter);
 
 export { AllRouter };
