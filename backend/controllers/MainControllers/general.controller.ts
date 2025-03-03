@@ -6,7 +6,11 @@ import { apiResponse } from '../../util/apiReponse';
 const getAllNotification = async (req: Request, res: Response) => {
   try {
     const hospitalId = req.body._id;
-    const notifications = await Notification.find({ hospitalId });
+    const notifications = await Notification.findOne({ hospitalId });
+
+    if (!notifications || !notifications.notifications.length) {
+      return apiResponse(res, 404, 'No Notifications Found', null);
+    }
 
     return apiResponse(res, 200, 'Success', notifications);
   } catch (error) {
@@ -26,17 +30,13 @@ const postNotification = async (req: Request, res: Response) => {
     const updatedNotification = await Notification.findOneAndUpdate(
       { hospitalId },
       { $push: { notifications: notification } },
-      { new: true, upsert: true }
+      { new: true, upsert: true, setDefaultsOnInsert: true }
     );
 
-    return apiResponse(res, 200, 'Success', [updatedNotification]);
+    return apiResponse(res, 200, 'Notification Added Successfully', updatedNotification);
   } catch (error) {
     return apiResponse(res, 500, (error as Error).message);
   }
 };
 
-
-export { 
-  postNotification,
-  getAllNotification,
-};
+export { postNotification, getAllNotification };

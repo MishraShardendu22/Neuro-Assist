@@ -14,12 +14,12 @@ const postCase = async (req: Request, res: Response) => {
 
     const hospitalExist = await Hospital.findById(hospitalId);
     if (!hospitalExist) {
-      return apiResponse(res, 400, 'Hospital does not exist');
+      return apiResponse(res, 404, 'Hospital does not exist');
     }
 
     const patientExist = await Patient.findById(patientId);
     if (!patientExist) {
-      return apiResponse(res, 400, 'Patient does not exist');
+      return apiResponse(res, 404, 'Patient does not exist');
     }
 
     const newCase = await Case.create({
@@ -31,9 +31,9 @@ const postCase = async (req: Request, res: Response) => {
     hospitalExist.cases.push(newCase._id as mongoose.Types.ObjectId);
     await hospitalExist.save();
 
-    return apiResponse(res, 200, 'Case Created Successfully', [newCase]);
+    return apiResponse(res, 201, 'Case Created Successfully', newCase);
   } catch (err) {
-    console.log('There was an Error', err);
+    console.error('Error creating case:', err);
     return apiResponse(res, 500, 'Internal Server Error');
   }
 };
@@ -44,12 +44,12 @@ const getAllCases = async (req: Request, res: Response) => {
     const hospitalExist = await Hospital.findById(hospitalId).populate('cases');
 
     if (!hospitalExist) {
-      return apiResponse(res, 400, 'Hospital does not exist');
+      return apiResponse(res, 404, 'Hospital does not exist');
     }
 
-    return apiResponse(res, 200, 'All Cases Retrieved Successfully', [hospitalExist.cases]);
+    return apiResponse(res, 200, 'All Cases Retrieved Successfully', hospitalExist.cases);
   } catch (err) {
-    console.log('There was an Error', err);
+    console.error('Error fetching cases:', err);
     return apiResponse(res, 500, 'Internal Server Error');
   }
 };
@@ -59,12 +59,12 @@ const getUniqueCase = async (req: Request, res: Response) => {
     const caseId = req.params.id;
     const caseExist = await Case.findById(caseId);
     if (!caseExist) {
-      return apiResponse(res, 400, 'Case does not exist');
+      return apiResponse(res, 404, 'Case does not exist');
     }
 
-    return apiResponse(res, 200, 'Case Retrieved Successfully', [caseExist]);
+    return apiResponse(res, 200, 'Case Retrieved Successfully', caseExist);
   } catch (err) {
-    console.log('There was an Error', err);
+    console.error('Error fetching case:', err);
     return apiResponse(res, 500, 'Internal Server Error');
   }
 };
@@ -72,10 +72,15 @@ const getUniqueCase = async (req: Request, res: Response) => {
 const deleteCase = async (req: Request, res: Response) => {
   try {
     const caseId = req.params.id;
-    await Case.findByIdAndDelete(caseId);
+    const deletedCase = await Case.findByIdAndDelete(caseId);
+
+    if (!deletedCase) {
+      return apiResponse(res, 404, 'Case does not exist');
+    }
+
     return apiResponse(res, 200, 'Case Deleted Successfully');
   } catch (err) {
-    console.log('There was an Error', err);
+    console.error('Error deleting case:', err);
     return apiResponse(res, 500, 'Internal Server Error');
   }
 };
@@ -89,17 +94,19 @@ const updateCase = async (req: Request, res: Response) => {
       return apiResponse(res, 400, 'Status is required');
     }
 
-    const caseExist = await Case.findById(caseId);
-    if (!caseExist) {
-      return apiResponse(res, 400, 'Case does not exist');
+    const updatedCase = await Case.findByIdAndUpdate(
+      caseId,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedCase) {
+      return apiResponse(res, 404, 'Case does not exist');
     }
 
-    caseExist.status = status;
-    await caseExist.save();
-
-    return apiResponse(res, 200, 'Case Updated Successfully', [caseExist]);
+    return apiResponse(res, 200, 'Case Updated Successfully', updatedCase);
   } catch (err) {
-    console.log('There was an Error', err);
+    console.error('Error updating case:', err);
     return apiResponse(res, 500, 'Internal Server Error');
   }
 };
