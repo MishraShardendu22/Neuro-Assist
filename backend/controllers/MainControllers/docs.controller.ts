@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
+import { Document as Doc } from '../../model';
 import { apiResponse } from '../../util/apiReponse';
-import { Document as Doc, Hospital, Report } from '../../model';
 
 const getDocumentOne = async (req: Request, res: Response) => {
   try {
-    const { patientId, caseId } = req.body;
-    const document = await Doc.findOne({ caseId, patientId });
+    const { hospitalId, patientId, caseId } = req.body;
+    const document = await Doc.findOne({ hospitalId, caseId, patientId });
     if (!document) {
       return apiResponse(res, 400, 'Document does not exist');
     }
@@ -19,13 +19,13 @@ const getDocumentOne = async (req: Request, res: Response) => {
 
 const postDocument = async (req: Request, res: Response) => {
   try {
-    const { patientId, caseId, documentName, documentType, documentUrl } = req.body;
+    const { hospitalId, patientId, caseId, documentName, documentType, documentUrl } = req.body;
 
     if (!patientId || !caseId || !documentName || !documentType || !documentUrl) {
       return apiResponse(res, 400, 'All fields are required');
     }
 
-    const documentExist = await Doc.findOne({ caseId, patientId });
+    const documentExist = await Doc.findOne({ hospitalId, caseId, patientId });
     if (documentExist) {
       return apiResponse(res, 400, 'Document already exists');
     }
@@ -33,9 +33,10 @@ const postDocument = async (req: Request, res: Response) => {
     const newDocument = await Doc.create({
       caseId,
       patientId,
+      hospitalId, 
+      documentUrl,
       documentName,
       documentType,
-      documentUrl,
     });
 
     return apiResponse(res, 201, 'Document Created Successfully', newDocument);
@@ -47,13 +48,13 @@ const postDocument = async (req: Request, res: Response) => {
 
 const updateDocument = async (req: Request, res: Response) => {
   try {
-    const { patientId, caseId, documentName, documentType, documentUrl } = req.body;
+    const { hospitalId, patientId, caseId, documentName, documentType, documentUrl } = req.body;
 
     if (!patientId || !caseId || !documentName || !documentType || !documentUrl) {
       return apiResponse(res, 400, 'All fields are required');
     }
 
-    const documentExist = await Doc.findOne({ caseId, patientId });
+    const documentExist = await Doc.findOne({ hospitalId, caseId, patientId });
     if (!documentExist) {
       return apiResponse(res, 400, 'Document does not exist');
     }
@@ -72,8 +73,8 @@ const updateDocument = async (req: Request, res: Response) => {
 
 const deleteDocument = async (req: Request, res: Response) => {
   try {
-    const { patientId, caseId } = req.body;
-    const deletedDocument = await Doc.findOneAndDelete({ caseId, patientId });
+    const { hospitalId, patientId, caseId } = req.body;
+    const deletedDocument = await Doc.findOneAndDelete({ hospitalId, caseId, patientId });
     if (!deletedDocument) {
       return apiResponse(res, 400, 'Document does not exist');
     }

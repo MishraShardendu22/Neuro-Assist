@@ -8,6 +8,11 @@ export const documentSchema: Schema<IDocument> = new Schema(
       ref: 'Case',
       required: [true, 'Case ID is required'],
     },
+    hospitalId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Hospital',
+      required: [true, 'Patient ID is required'],
+    },
     patientId: {
       type: Schema.Types.ObjectId,
       ref: 'Patient',
@@ -19,7 +24,7 @@ export const documentSchema: Schema<IDocument> = new Schema(
     },
     documentType: {
       type: String,
-      enum: ['pdf', 'doc', 'docx', 'image'],
+      enum: ['pdf' , 'doc' , 'csv' , 'ppt' , 'txt' , 'xls' , 'pptx' , 'docx' , 'xlsx' , 'png' , 'jpeg' , 'jpg' , 'mp4' ,'avi' , 'mov' , 'mkv' , 'image' , 'video'],
       required: [true, 'Document Type is required'],
     },
     documentUrl: {

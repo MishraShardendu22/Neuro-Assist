@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { HospitalMiddleware } from '../../middleware/hospital.middleware';
-import {
+import { HospitalMiddleware } from '../../middleware/hospital.middleware';import {
   postDocument,
   getDocumentOne,
   updateDocument,
@@ -11,10 +10,10 @@ const DocumentsRouter = Router();
 
 DocumentsRouter.post('/postDocument', HospitalMiddleware, postDocument);
 
-DocumentsRouter.put('/updateDocument/:id', HospitalMiddleware, updateDocument);
+DocumentsRouter.put('/updateDocument', HospitalMiddleware, updateDocument);
 
-DocumentsRouter.get('/getDocumentOne/:id', HospitalMiddleware, getDocumentOne);
+DocumentsRouter.post('/getDocumentOne', HospitalMiddleware, getDocumentOne);
 
-DocumentsRouter.delete('/deleteDocument/:id', HospitalMiddleware, deleteDocument);
+DocumentsRouter.delete('/deleteDocument', HospitalMiddleware, deleteDocument);
 
 export { DocumentsRouter };

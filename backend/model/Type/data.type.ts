@@ -40,8 +40,10 @@ export interface IDocument extends Document {
   documentName: string;
   caseId: Types.ObjectId;
   patientId: Types.ObjectId;
-  documentType: 'pdf' | 'doc' | 'docx' | 'image';
+  hospitalId: Types.ObjectId;
+  documentType: 'pdf' | 'doc' | 'csv' | 'ppt' | 'txt' | 'xls' | 'pptx' | 'docx' | 'xlsx' | 'png' | 'jpeg' | 'jpg' | 'mp4' | 'avi' | 'mov' | 'mkv' | 'image' | 'video';
 }
+
 
 export interface IReport extends Document {
   BP?: string;

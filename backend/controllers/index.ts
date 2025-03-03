@@ -20,8 +20,6 @@ import {
   getReportsOne,
 } from './MainControllers/report.controller';
 
-import { postNotification, getAllNotification } from './MainControllers/notification.controller';
-
 import {
   loginP,
   registerP,
@@ -31,6 +29,12 @@ import {
   getReportOne,
   updateProfile,
 } from './MainControllers/patient.controller';
+
+import { 
+  postNotification, 
+  getAllNotification 
+} from './MainControllers/notification.controller';
+
 
 import {
   login,
