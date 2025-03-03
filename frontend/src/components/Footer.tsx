@@ -53,13 +53,15 @@ const Footer = () => {
           </div>
           
           <div className="hidden md:flex flex-col items-center justify-center">
-            <motion.div 
+            <div 
               className="p-4 rounded-full bg-muted dark:bg-muted"
-              whileHover={{ rotate: 5, scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
             >
-              
-            </motion.div>
+              <img
+                src="/Logo/PNG/main-logo-transparent.png"
+                alt="Shardendu Mishra"
+                className="w-46 h-46 rounded-full"
+              />
+            </div>
           </div>
           
           {/* Right Column */}
@@ -88,7 +90,7 @@ const Footer = () => {
           </div>
         </div>
         
-        <Separator className="my-8 bg-border dark:bg-border/50" />
+        <Separator className="bg-border dark:bg-border/50" />
         
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">

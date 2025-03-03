@@ -7,10 +7,10 @@ import { Route, Routes } from 'react-router-dom';
 import Register from './components/Page/Register';
 import NotFound from './components/Page/Not-Found';
 import Guidlines from './components/Page/Guidlines';
-import FileStack from './components/Page/Temp/FileStack';
+import FileStack from '../Temp/FileStack';
 import HomePatient from './components/Page/Patient/Home';
 import HomeHospital from './components/Page/Hospital/Home';
-import EditImages from './components/Page/Temp/EditImages';
+import EditImages from '../Temp/EditImages';
 import ReportsPatient from './components/Page/Patient/Reports';
 import ProfilePatient from './components/Page/Patient/Profile';
 import ProtectedPatient from './components/Routes/protected/patient.route';
@@ -23,7 +23,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Landing />} />
 
-        {/* Login and Register */}
         <Route
           path="/login"
           element={
@@ -49,7 +48,6 @@ const App = () => {
           }
         />
 
-        {/* Patient */}
         <Route
           path="/patient/home"
           element={
@@ -75,7 +73,6 @@ const App = () => {
           }
         />
 
-        {/* Hospital */}
         <Route
           path="/hospital/home"
           element={
@@ -119,9 +116,7 @@ const App = () => {
           }
         />
       </Routes>
-      <div className="relative min-h-screen">
-        <Theme />
-      </div>
+      <Theme />
     </Layout>
   );
 };
