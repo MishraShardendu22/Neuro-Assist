@@ -6,10 +6,10 @@ const ReportsRouter = Router();
 
 ReportsRouter.post('/postReport', HospitalMiddleware, postReport);
 
-ReportsRouter.put('/updateReport/:id', HospitalMiddleware, updateReport);
+ReportsRouter.put('/updateReport', HospitalMiddleware, updateReport);
 
-ReportsRouter.get('/getReportsOne/:id', HospitalMiddleware, getReportsOne);
+ReportsRouter.post('/getReportsOne', HospitalMiddleware, getReportsOne);
 
-ReportsRouter.delete('/deleteReport/:id', HospitalMiddleware, deleteReport);
+ReportsRouter.delete('/deleteReport', HospitalMiddleware, deleteReport);
 
 export { ReportsRouter };

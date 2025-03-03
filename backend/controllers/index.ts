@@ -33,7 +33,7 @@ import {
 import { 
   postNotification, 
   getAllNotification 
-} from './MainControllers/notification.controller';
+} from './MainControllers/general.controller';
 
 
 import {
