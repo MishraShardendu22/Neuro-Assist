@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
+import { Hospital, Report } from '../../model';
 import { apiResponse } from '../../util/apiReponse';
-import { Document as Doc, Hospital, Report } from '../../model';
 
 const register = async (req: Request, res: Response) => {
   try {
