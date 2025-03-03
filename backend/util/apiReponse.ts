@@ -8,8 +8,8 @@ export const apiResponse = <T>(
   token?: string
 ) => {
   res.status(status).json({
-    "Message": message,
-    "Data": data, 
-    "Token": token ?? ""
+    Message: message,
+    Data: data,
+    Token: token ?? '',
   });
 };

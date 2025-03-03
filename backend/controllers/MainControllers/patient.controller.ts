@@ -7,39 +7,39 @@ import { apiResponse } from '../../util/apiReponse';
 const registerP = async (req: Request, res: Response) => {
   try {
     const { fullName, email, password, phoneNumber, gender } = req.body;
-    console.log("CP-1");
+    console.log('CP-1');
 
     if (!fullName || !email || !password || !phoneNumber || !gender) {
-      console.log("CP-2.5");
+      console.log('CP-2.5');
       return apiResponse(res, 400, 'Please fill all fields');
     }
 
     let patientId;
     do {
       patientId =
-        "P-" + fullName.split(' ').join('').toLowerCase() + "-" + Math.floor(Math.random() * 1000);
+        'P-' + fullName.split(' ').join('').toLowerCase() + '-' + Math.floor(Math.random() * 1000);
     } while (await Patient.findOne({ patientId }));
 
-    console.log("CP-2");
+    console.log('CP-2');
     const patientExists = await Patient.findOne({ email });
     if (patientExists) {
       return apiResponse(res, 400, 'Patient already exists');
     }
 
-    console.log("CP-4");
+    console.log('CP-4');
     if (password.length < 8) {
       return apiResponse(res, 400, 'Password should be at least 8 characters long');
     }
 
-    console.log("CP-5");
+    console.log('CP-5');
     if (!/^\d{10}$/.test(phoneNumber)) {
       return apiResponse(res, 400, 'Please enter a valid 10-digit phone number');
     }
 
-    console.log("CP-6");
+    console.log('CP-6');
     const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(5));
 
-    console.log("CP-7");
+    console.log('CP-7');
     const newPatient = new Patient({
       email,
       gender,
@@ -49,11 +49,11 @@ const registerP = async (req: Request, res: Response) => {
       password: hashedPassword,
     });
 
-    console.log("CP-8");
+    console.log('CP-8');
     await newPatient.save();
     newPatient.password = 'Hidden for Security Reasons';
 
-    console.log("CP-9");
+    console.log('CP-9');
     return apiResponse(res, 201, 'Patient Registered Successfully', newPatient);
   } catch (err) {
     console.error('There was an Error', err);
@@ -98,17 +98,17 @@ const loginP = async (req: Request, res: Response) => {
 
 const verifyPatient = async (req: Request, res: Response) => {
   try {
-    console.log("CP-1");
-    const { patientId, role } = req.body; 
+    console.log('CP-1');
+    const { patientId, role } = req.body;
     console.log(patientId);
     console.log(role);
 
-    console.log("CP-2");
+    console.log('CP-2');
     if (!role || role !== 'Patient') {
       return apiResponse(res, 401, 'Unauthorized Access');
     }
 
-    console.log("CP-3");
+    console.log('CP-3');
     if (!patientId || typeof patientId !== 'string') {
       return apiResponse(res, 400, 'Invalid Patient ID');
     }
@@ -118,7 +118,7 @@ const verifyPatient = async (req: Request, res: Response) => {
       return apiResponse(res, 404, 'Patient not found');
     }
 
-    console.log("CP-4");
+    console.log('CP-4');
     return apiResponse(res, 200, 'Patient Verified Successfully', patient);
   } catch (err) {
     console.error('There was an Error', err);

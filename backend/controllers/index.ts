@@ -20,10 +20,7 @@ import {
   getReportsOne,
 } from './MainControllers/report.controller';
 
-import { 
-  postNotification,
-  getAllNotification,
-} from './MainControllers/general.controller';
+import { postNotification, getAllNotification } from './MainControllers/general.controller';
 
 import {
   loginP,

@@ -15,11 +15,11 @@ const PatientRouter = Router();
 PatientRouter.post('/login', loginP);
 PatientRouter.post('/register', registerP);
 
+PatientRouter.put('/profile', PatientMiddleware, updateProfile);
+
 PatientRouter.get('/profile', PatientMiddleware, getProfile);
 PatientRouter.get('/report', PatientMiddleware, getReportAll);
 PatientRouter.get('/report/:id', PatientMiddleware, getReportOne);
 PatientRouter.get('/verifyPatient', PatientMiddleware, verifyPatient);
-
-PatientRouter.put('/profile', PatientMiddleware, updateProfile);
 
 export { PatientRouter };

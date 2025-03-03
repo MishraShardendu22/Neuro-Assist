@@ -6,7 +6,6 @@ import { HospitalRouter } from './MainRoutes/hospital.route';
 import { DocumentsRouter } from './MainRoutes/document.route';
 import { GeneralRouter } from './MainRoutes/notification.route';
 
-
 const AllRouter = Router();
 
 AllRouter.use('/cases', CasesRouter);

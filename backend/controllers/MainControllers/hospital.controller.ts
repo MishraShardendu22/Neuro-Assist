@@ -66,9 +66,12 @@ const login = async (req: Request, res: Response) => {
     );
 
     const responseHospital = hospitalExist.toObject();
-    responseHospital.password = "Hidden";
+    responseHospital.password = 'Hidden';
 
-    return apiResponse(res, 200, 'Hospital Logged In Successfully', { hospital: responseHospital, token });
+    return apiResponse(res, 200, 'Hospital Logged In Successfully', {
+      hospital: responseHospital,
+      token,
+    });
   } catch (err) {
     console.error('Error logging in:', err);
     return apiResponse(res, 500, 'Internal Server Error');
@@ -85,7 +88,7 @@ const verifyHospital = async (req: Request, res: Response) => {
     }
 
     const responseHospital = hospitalExist.toObject();
-    responseHospital.password = "Hidden";
+    responseHospital.password = 'Hidden';
 
     return apiResponse(res, 200, 'Hospital Verified Successfully', responseHospital);
   } catch (err) {
