@@ -18,8 +18,8 @@ export const HospitalMiddleware = (req: Request, res: Response, next: NextFuncti
         return apiResponse(res, 401, 'Unauthorized');
       }
 
-      const decodedToken = decoded as { _id: string; role: string };
-      req.body.hospitalId = decodedToken._id;
+      const decodedToken = decoded as { id: string; role: string };
+      req.body.hospitalId = decodedToken.id;
       req.body.role = decodedToken.role;
 
       if ((decoded as { role: string }).role !== 'Hospital') {

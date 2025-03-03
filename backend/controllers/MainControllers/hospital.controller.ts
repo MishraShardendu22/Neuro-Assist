@@ -9,27 +9,33 @@ const register = async (req: Request, res: Response) => {
     const { fullName, email, password, phoneNumber, address } = req.body;
 
     if (!fullName || !email || !password || !phoneNumber || !address) {
-      return apiResponse(res, 400, 'All fields are required');
-    }
-
-    if (password.length < 8) {
-      return apiResponse(res, 400, 'Password must be at least 8 characters long');
+      return apiResponse(res, 400, 'Please fill all fields');
     }
 
     const hospitalExist = await Hospital.findOne({ email });
     if (hospitalExist) {
-      return apiResponse(res, 409, 'Hospital already exists');
+      return apiResponse(res, 400, 'Hospital already exists');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    if (password.length < 8) {
+      return apiResponse(res, 400, 'Password should be at least 8 characters long');
+    }
 
-    const newHospital = await Hospital.create({
+    if (!/^[0-9]{10}$/.test(phoneNumber)) {
+      return apiResponse(res, 400, 'Please enter a valid 10-digit phone number');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(5));
+    const newHospital = new Hospital({
       email,
       address,
       fullName,
       phoneNumber,
       password: hashedPassword,
     });
+
+    await newHospital.save();
+    newHospital.password = 'Hidden for Security Reasons';
 
     return apiResponse(res, 201, 'Hospital Registered Successfully', newHospital);
   } catch (err) {
@@ -43,37 +49,32 @@ const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return apiResponse(res, 400, 'All fields are required');
+      return apiResponse(res, 400, 'Please fill all fields');
     }
 
-    const hospitalExist = await Hospital.findOne({ email });
-    if (!hospitalExist) {
-      return apiResponse(res, 404, 'Hospital does not exist');
+    const hospital = await Hospital.findOne({ email });
+    if (!hospital) {
+      return apiResponse(res, 404, 'Hospital not found');
     }
 
-    const isMatch = await bcrypt.compare(password, hospitalExist.password);
+    const isMatch = await bcrypt.compare(password, hospital.password);
     if (!isMatch) {
-      return apiResponse(res, 401, 'Invalid Credentials');
+      return apiResponse(res, 400, 'Invalid Credentials');
     }
 
     const token = jwt.sign(
       {
-        id: hospitalExist._id,
-        role: hospitalExist.role,
+        id: hospital._id,
+        role: hospital.role,
       },
       process.env.JWT_SECRET as string,
       { expiresIn: '30d' }
     );
 
-    const responseHospital = hospitalExist.toObject();
-    responseHospital.password = 'Hidden';
-
-    return apiResponse(res, 200, 'Hospital Logged In Successfully', {
-      hospital: responseHospital,
-      token,
-    });
+    hospital.password = 'Hidden for Security Reasons';
+    return apiResponse(res, 200, 'Hospital Logged In Successfully', hospital, token);
   } catch (err) {
-    console.error('Error logging in:', err);
+    console.error('Error logging in hospital:', err);
     return apiResponse(res, 500, 'Internal Server Error');
   }
 };
@@ -82,15 +83,12 @@ const verifyHospital = async (req: Request, res: Response) => {
   try {
     const { hospitalId } = req.body;
 
-    const hospitalExist = await Hospital.findById(hospitalId);
-    if (!hospitalExist) {
-      return apiResponse(res, 404, 'Hospital does not exist');
+    const hospital = await Hospital.findById(hospitalId);
+    if (!hospital) {
+      return apiResponse(res, 404, 'Hospital not found');
     }
 
-    const responseHospital = hospitalExist.toObject();
-    responseHospital.password = 'Hidden';
-
-    return apiResponse(res, 200, 'Hospital Verified Successfully', responseHospital);
+    return apiResponse(res, 200, 'Hospital Verified Successfully', hospital);
   } catch (err) {
     console.error('Error verifying hospital:', err);
     return apiResponse(res, 500, 'Internal Server Error');
@@ -99,6 +97,7 @@ const verifyHospital = async (req: Request, res: Response) => {
 
 const emergencyActivate = async (req: Request, res: Response) => {
   try {
+    console.log("CP-1")
     const {
       caseId,
       patientId,
@@ -110,26 +109,33 @@ const emergencyActivate = async (req: Request, res: Response) => {
       timeOfLastNormal = new Date(),
     } = req.body;
 
+    console.log("CP-2")
     if (!caseId || !patientId) {
       return apiResponse(res, 400, 'Case ID and Patient ID are required');
     }
 
+    console.log("CP-3")
     const reportExist = await Report.findOne({ caseId, patientId });
     if (reportExist) {
       return apiResponse(res, 409, 'Report already exists');
     }
 
-    const newReport = await Report.create({
+    console.log("CP-4")
+    const newReport = new Report({
+      caseId,
+      patientId,
       BP,
       HR,
-      caseId,
       symptoms,
-      patientId,
       documentId,
       O2_Saturation,
       timeOfLastNormal,
     });
 
+    console.log("CP-5")
+    await newReport.save();
+
+    console.log("CP-6")
     return apiResponse(res, 201, 'Report Created Successfully', newReport);
   } catch (err) {
     console.error('Error in emergency activation:', err);

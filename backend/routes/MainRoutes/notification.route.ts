@@ -2,9 +2,10 @@ import { Router } from 'express';
 import { postNotification, getAllNotification } from '../../controllers/index';
 import { HospitalMiddleware } from '../../middleware/hospital.middleware';
 
-const GeneralRouter = Router();
+const NotificationRouter = Router();
 
-GeneralRouter.get('/new', HospitalMiddleware, postNotification);
-GeneralRouter.get('/all', HospitalMiddleware, getAllNotification);
+NotificationRouter.post('/new', HospitalMiddleware, postNotification);
 
-export { GeneralRouter };
+NotificationRouter.get('/all', HospitalMiddleware, getAllNotification);
+
+export { NotificationRouter };

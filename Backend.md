@@ -172,3 +172,10 @@ _(Images are stored as documents with `documentType` set to `"image"`.)_
 #### Treatment Recommendations (e.g., "Eligible for Thrombolysis")
 
 #### Critical Values (highlighting abnormal lab results or vitals)
+
+
+
+# Need To Tes Again
+1.) Emergency route Hospital
+2.) Both report route Patient
+3.) 
