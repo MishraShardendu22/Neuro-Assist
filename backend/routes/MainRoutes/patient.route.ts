@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
-  login,
-  register,
+  loginP,
+  registerP,
   getProfile,
   getReportAll,
   getReportOne,
@@ -12,13 +12,13 @@ import { PatientMiddleware } from '../../middleware/patient.middleware';
 
 const PatientRouter = Router();
 
-PatientRouter.post('/login', login);
-PatientRouter.post('/register', register);
-PatientRouter.post('/verifyPatient,', PatientMiddleware, verifyPatient);
+PatientRouter.post('/login', loginP);
+PatientRouter.post('/register', registerP);
 
 PatientRouter.get('/profile', PatientMiddleware, getProfile);
 PatientRouter.get('/report', PatientMiddleware, getReportAll);
 PatientRouter.get('/report/:id', PatientMiddleware, getReportOne);
+PatientRouter.get('/verifyPatient', PatientMiddleware, verifyPatient);
 
 PatientRouter.put('/profile', PatientMiddleware, updateProfile);
 

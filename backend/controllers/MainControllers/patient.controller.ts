@@ -7,33 +7,39 @@ import { apiResponse } from '../../util/apiReponse';
 const registerP = async (req: Request, res: Response) => {
   try {
     const { fullName, email, password, phoneNumber, gender } = req.body;
+    console.log("CP-1");
+
+    if (!fullName || !email || !password || !phoneNumber || !gender) {
+      console.log("CP-2.5");
+      return apiResponse(res, 400, 'Please fill all fields');
+    }
 
     let patientId;
     do {
       patientId =
-        'P-' + fullName.split(' ').join('').toLowerCase() + Math.floor(Math.random() * 1000);
+        "P-" + fullName.split(' ').join('').toLowerCase() + "-" + Math.floor(Math.random() * 1000);
     } while (await Patient.findOne({ patientId }));
 
-    if (!fullName || !patientId || !email || !password || !phoneNumber || !gender) {
-      return apiResponse(res, 400, 'Please fill all fields');
-    }
-
+    console.log("CP-2");
     const patientExists = await Patient.findOne({ email });
     if (patientExists) {
       return apiResponse(res, 400, 'Patient already exists');
     }
 
+    console.log("CP-4");
     if (password.length < 8) {
       return apiResponse(res, 400, 'Password should be at least 8 characters long');
     }
 
+    console.log("CP-5");
     if (!/^\d{10}$/.test(phoneNumber)) {
       return apiResponse(res, 400, 'Please enter a valid 10-digit phone number');
     }
 
-    const genSalt = await bcrypt.genSalt(5);
-    const hashedPassword = await bcrypt.hash(password, genSalt);
+    console.log("CP-6");
+    const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(5));
 
+    console.log("CP-7");
     const newPatient = new Patient({
       email,
       gender,
@@ -43,10 +49,12 @@ const registerP = async (req: Request, res: Response) => {
       password: hashedPassword,
     });
 
+    console.log("CP-8");
     await newPatient.save();
     newPatient.password = 'Hidden for Security Reasons';
 
-    return apiResponse(res, 201, 'Patient Registered Successfully', [newPatient]);
+    console.log("CP-9");
+    return apiResponse(res, 201, 'Patient Registered Successfully', newPatient);
   } catch (err) {
     console.error('There was an Error', err);
     return apiResponse(res, 500, 'Internal Server Error');
@@ -81,86 +89,92 @@ const loginP = async (req: Request, res: Response) => {
     );
 
     patient.password = 'Hidden for Security Reasons';
-    return apiResponse(res, 200, 'Patient Logged In Successfully', [patient, token]);
+    return apiResponse(res, 200, 'Patient Logged In Successfully', patient, token);
   } catch (err) {
-    console.log('There was an Error', err);
-    apiResponse(res, 500, 'Internal Server Error');
+    console.error('There was an Error', err);
+    return apiResponse(res, 500, 'Internal Server Error');
   }
 };
 
 const verifyPatient = async (req: Request, res: Response) => {
   try {
-    const { _id, role } = req.body;
+    console.log("CP-1");
+    const { patientId, role } = req.body; 
+    console.log(patientId);
+    console.log(role);
 
-    if (role !== 'Patient') {
+    console.log("CP-2");
+    if (!role || role !== 'Patient') {
       return apiResponse(res, 401, 'Unauthorized Access');
     }
 
-    const patient = await Patient.findById({ _id });
+    console.log("CP-3");
+    if (!patientId || typeof patientId !== 'string') {
+      return apiResponse(res, 400, 'Invalid Patient ID');
+    }
+
+    const patient = await Patient.findById(patientId);
     if (!patient) {
       return apiResponse(res, 404, 'Patient not found');
     }
 
-    return apiResponse(res, 200, 'Patient Verified Successfully', [patient]);
+    console.log("CP-4");
+    return apiResponse(res, 200, 'Patient Verified Successfully', patient);
   } catch (err) {
-    console.log('There was an Error', err);
-    apiResponse(res, 500, 'Internal Server Error');
+    console.error('There was an Error', err);
+    return apiResponse(res, 500, 'Internal Server Error');
   }
 };
 
 const getReportAll = async (req: Request, res: Response) => {
   try {
-    const { _id } = req.body;
-    const reports = await Report.find({ patientId: _id });
+    const { patientId } = req.body;
+    const reports = await Report.find({ patientId: patientId });
 
-    if (!reports) {
-      return apiResponse(res, 404, 'No Reports Found');
-    }
-
-    return apiResponse(res, 200, 'Reports Found Successfully', [reports]);
+    return apiResponse(res, 200, 'Reports Found Successfully', reports);
   } catch (err) {
-    console.log('There was an Error', err);
-    apiResponse(res, 500, 'Internal Server Error');
+    console.error('There was an Error', err);
+    return apiResponse(res, 500, 'Internal Server Error');
   }
 };
 
 const getReportOne = async (req: Request, res: Response) => {
   try {
-    const { _id } = req.body;
+    const { patientId } = req.body;
     const reportId = req.params.id;
-    const report = await Report.findOne({ patientId: _id, reportId });
+    const report = await Report.findOne({ patientId: patientId, reportId });
 
     if (!report) {
       return apiResponse(res, 404, 'Report not found');
     }
 
-    return apiResponse(res, 200, 'Report Found Successfully', [report]);
+    return apiResponse(res, 200, 'Report Found Successfully', report);
   } catch (err) {
-    console.log('There was an Error', err);
-    apiResponse(res, 500, 'Internal Server Error');
+    console.error('There was an Error', err);
+    return apiResponse(res, 500, 'Internal Server Error');
   }
 };
 
 const getProfile = async (req: Request, res: Response) => {
   try {
-    const { _id } = req.body;
-    const patient = await Patient.findById({ _id });
+    const { patientId } = req.body;
+    const patient = await Patient.findById(patientId);
 
     if (!patient) {
       return apiResponse(res, 404, 'Patient not found');
     }
 
-    return apiResponse(res, 200, 'Patient Found Successfully', [patient]);
+    return apiResponse(res, 200, 'Patient Found Successfully', patient);
   } catch (err) {
-    console.log('There was an Error', err);
-    apiResponse(res, 500, 'Internal Server Error');
+    console.error('There was an Error', err);
+    return apiResponse(res, 500, 'Internal Server Error');
   }
 };
 
 const updateProfile = async (req: Request, res: Response) => {
   try {
-    const { _id, fullName, email, phoneNumber } = req.body;
-    const patient = await Patient.findById(_id, '-password');
+    const { patientId, fullName, email, phoneNumber } = req.body;
+    const patient = await Patient.findById(patientId);
 
     if (!patient) {
       return apiResponse(res, 404, 'Patient not found');
@@ -171,10 +185,10 @@ const updateProfile = async (req: Request, res: Response) => {
     patient.email = email || patient.email;
 
     await patient.save();
-    return apiResponse(res, 200, 'Patient Updated Successfully', [patient]);
+    return apiResponse(res, 200, 'Patient Updated Successfully', patient);
   } catch (err) {
-    console.log('There was an Error', err);
-    apiResponse(res, 500, 'Internal Server Error');
+    console.error('There was an Error', err);
+    return apiResponse(res, 500, 'Internal Server Error');
   }
 };
 

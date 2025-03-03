@@ -4,8 +4,12 @@ export const apiResponse = <T>(
   res: Response,
   status: number,
   message: string,
-  data: T[] = [],
+  data: T = {} as T,
   token?: string
 ) => {
-  res.status(status).json({ message, data, token });
+  res.status(status).json({
+    "Message": message,
+    "Data": data, 
+    "Token": token ?? ""
+  });
 };

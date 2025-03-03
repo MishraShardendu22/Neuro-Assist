@@ -9,7 +9,6 @@ export const patientSchema: Schema<IPatient> = new Schema(
     },
     patientId: {
       type: String,
-      required: [true, 'Patient ID is required'],
       unique: true,
     },
     email: {
