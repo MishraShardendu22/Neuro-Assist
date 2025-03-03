@@ -20,7 +20,10 @@ import {
   getReportsOne,
 } from './MainControllers/report.controller';
 
-import { getAllNotification } from './MainControllers/general.controller';
+import { 
+  postNotification,
+  getAllNotification,
+} from './MainControllers/general.controller';
 
 import {
   loginP,
@@ -63,6 +66,7 @@ export {
   getDocumentOne,
   updateDocument,
   deleteDocument,
+  postNotification,
   emergencyActivate,
   getAllNotification,
 };

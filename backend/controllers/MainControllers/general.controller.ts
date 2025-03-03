@@ -8,10 +8,35 @@ const getAllNotification = async (req: Request, res: Response) => {
     const hospitalId = req.body._id;
     const notifications = await Notification.find({ hospitalId });
 
-    apiResponse(res, 200, 'Success', notifications);
+    return apiResponse(res, 200, 'Success', notifications);
   } catch (error) {
-    apiResponse(res, 500, (error as Error).message);
+    return apiResponse(res, 500, (error as Error).message);
   }
 };
 
-export { getAllNotification };
+const postNotification = async (req: Request, res: Response) => {
+  try {
+    const hospitalId = req.body._id;
+    const { notification } = req.body;
+
+    if (!notification) {
+      return apiResponse(res, 400, 'Notification content is required');
+    }
+
+    const updatedNotification = await Notification.findOneAndUpdate(
+      { hospitalId },
+      { $push: { notifications: notification } },
+      { new: true, upsert: true }
+    );
+
+    return apiResponse(res, 200, 'Success', [updatedNotification]);
+  } catch (error) {
+    return apiResponse(res, 500, (error as Error).message);
+  }
+};
+
+
+export { 
+  postNotification,
+  getAllNotification,
+};
