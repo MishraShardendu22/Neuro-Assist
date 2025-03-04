@@ -1,9 +1,5 @@
 const NewCase = () => {
-  return (
-    <div>
-      New Case
-    </div>
-  )
-}
+  return <div>New Case</div>;
+};
 
-export default NewCase
+export default NewCase;

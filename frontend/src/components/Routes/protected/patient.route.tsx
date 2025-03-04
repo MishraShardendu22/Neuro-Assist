@@ -17,7 +17,7 @@ const ProtectedPatient: React.FC<ProtectedPatientProps> = ({ children }) => {
     let isMounted = true;
     const checkAuthentication = async () => {
       const token = localStorage.getItem('token');
-      console.log("The Token is:",token);
+      console.log('The Token is:', token);
 
       if (!token) {
         if (isMounted) setIsAuthenticated(false);
@@ -29,7 +29,7 @@ const ProtectedPatient: React.FC<ProtectedPatientProps> = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log("The response is:", response);
+        console.log('The response is:', response);
 
         if (!isMounted) return;
 

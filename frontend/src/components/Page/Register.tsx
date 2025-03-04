@@ -8,7 +8,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const [address, setAddress] = useState(''); 
+  const [address, setAddress] = useState('');
   const [gender, setGender] = useState('Male');
   const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
@@ -16,7 +16,7 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [userType, setUserType] = useState('patient');
 
-  const handleRegister = async (e: { preventDefault: () => void; }) => {
+  const handleRegister = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -29,7 +29,7 @@ const Register = () => {
       email,
       password,
       phoneNumber,
-      ...(userType === 'patient' ? { gender } : { address })
+      ...(userType === 'patient' ? { gender } : { address }),
     };
 
     try {
@@ -47,17 +47,19 @@ const Register = () => {
     }
   };
 
-  if(loading){
-    return <Loader />
+  if (loading) {
+    return <Loader />;
   }
 
   return (
-    <div style={{
-      maxWidth: '400px',
-      margin: '2rem auto',
-      padding: '1rem',
-      border: '1px solid #ccc'
-    }}>
+    <div
+      style={{
+        maxWidth: '400px',
+        margin: '2rem auto',
+        padding: '1rem',
+        border: '1px solid #ccc',
+      }}
+    >
       <h2 style={{ textAlign: 'center' }}>Register</h2>
       <form onSubmit={handleRegister}>
         <div style={{ marginBottom: '1rem' }}>
@@ -70,8 +72,12 @@ const Register = () => {
             onChange={(e) => setUserType(e.target.value)}
             style={{ width: '100%', padding: '8px' }}
           >
-            <option value="patient">Patient</option>
-            <option value="hospital">Hospital</option>
+            <option className="bg-black/100" value="patient">
+              Patient
+            </option>
+            <option className="bg-black/100" value="hospital">
+              Hospital
+            </option>
           </select>
         </div>
 
@@ -168,25 +174,13 @@ const Register = () => {
           </div>
         )}
 
-        {error && (
-          <div style={{ color: 'red', marginBottom: '1rem' }}>
-            {error}
-          </div>
-        )}
+        {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
 
-        {message && (
-          <div style={{ color: 'green', marginBottom: '1rem' }}>
-            {message}
-          </div>
-        )}
+        {message && <div style={{ color: 'green', marginBottom: '1rem' }}>{message}</div>}
 
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={loading}
-            >
-              {loading ? 'Processing...' : 'Register'}
-            </Button>
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? 'Processing...' : 'Register'}
+        </Button>
       </form>
     </div>
   );

@@ -48,7 +48,7 @@ const NotFound = () => {
             strokeWidth="3"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
-            transition={{ delay: 0.8, duration: 1.5, ease: "easeInOut" }}
+            transition={{ delay: 0.8, duration: 1.5, ease: 'easeInOut' }}
           />
           <motion.circle
             cx="170"

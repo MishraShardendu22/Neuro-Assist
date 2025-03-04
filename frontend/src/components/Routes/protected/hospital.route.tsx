@@ -14,8 +14,6 @@ const ProtectedHospital: React.FC<ProtectedHospitalProps> = ({ children }) => {
   const setUser = useUserStore((state: any) => state.setUser);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-
-
   useEffect(() => {
     let isMounted = true;
     const checkAuthentication = async () => {

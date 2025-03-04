@@ -1,9 +1,5 @@
-const History = () => {
-  return (
-    <div>
-      Hospital
-    </div>
-  )
-}
+const HistoryHospital = () => {
+  return <div>Hospital</div>;
+};
 
-export default History
+export default HistoryHospital;

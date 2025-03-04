@@ -30,10 +30,9 @@ const UnprotectedRoutes: React.FC<UnprotectedRoutesProps> = ({ children }) => {
       let authenticatedUser = null;
 
       try {
-        const hospitalResponse = await axiosInstance.get(
-          '/hospital/verifyHospital',
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const hospitalResponse = await axiosInstance.get('/hospital/verifyHospital', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         if (hospitalResponse.status === 200 && isMounted) {
           authenticatedUser = hospitalResponse.data.Data;
@@ -48,10 +47,9 @@ const UnprotectedRoutes: React.FC<UnprotectedRoutesProps> = ({ children }) => {
 
       if (!authenticatedUser) {
         try {
-          const patientResponse = await axiosInstance.get(
-            '/patient/verifyPatient',
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
+          const patientResponse = await axiosInstance.get('/patient/verifyPatient', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
           if (patientResponse.status === 200 && isMounted) {
             authenticatedUser = patientResponse.data.Data;
@@ -89,7 +87,7 @@ const UnprotectedRoutes: React.FC<UnprotectedRoutesProps> = ({ children }) => {
   }
 
   if (!isUnauthenticated) {
-    return <Navigate to={user?.role === 'Hospital' ? "/hospital/home" : "/patient/home"} />;
+    return <Navigate to={user?.role === 'Hospital' ? '/hospital/home' : '/patient/home'} />;
   }
 
   return <>{children}</>;

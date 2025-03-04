@@ -33,7 +33,7 @@ const postDocument = async (req: Request, res: Response) => {
     const newDocument = await Doc.create({
       caseId,
       patientId,
-      hospitalId, 
+      hospitalId,
       documentUrl,
       documentName,
       documentType,

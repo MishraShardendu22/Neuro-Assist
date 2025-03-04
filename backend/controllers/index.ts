@@ -30,11 +30,7 @@ import {
   updateProfile,
 } from './MainControllers/patient.controller';
 
-import { 
-  postNotification, 
-  getAllNotification 
-} from './MainControllers/general.controller';
-
+import { postNotification, getAllNotification } from './MainControllers/general.controller';
 
 import {
   login,

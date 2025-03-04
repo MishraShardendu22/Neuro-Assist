@@ -106,7 +106,7 @@ const verifyHospital = async (req: Request, res: Response) => {
 
 const emergencyActivate = async (req: Request, res: Response) => {
   try {
-    console.log("CP-1")
+    console.log('CP-1');
     const {
       caseId,
       patientId,
@@ -118,18 +118,18 @@ const emergencyActivate = async (req: Request, res: Response) => {
       timeOfLastNormal = new Date(),
     } = req.body;
 
-    console.log("CP-2")
+    console.log('CP-2');
     if (!caseId || !patientId) {
       return apiResponse(res, 400, 'Case ID and Patient ID are required');
     }
 
-    console.log("CP-3")
+    console.log('CP-3');
     const reportExist = await Report.findOne({ caseId, patientId });
     if (reportExist) {
       return apiResponse(res, 409, 'Report already exists');
     }
 
-    console.log("CP-4")
+    console.log('CP-4');
     const newReport = new Report({
       caseId,
       patientId,
@@ -141,10 +141,10 @@ const emergencyActivate = async (req: Request, res: Response) => {
       timeOfLastNormal,
     });
 
-    console.log("CP-5")
+    console.log('CP-5');
     await newReport.save();
 
-    console.log("CP-6")
+    console.log('CP-6');
     return apiResponse(res, 201, 'Report Created Successfully', newReport);
   } catch (err) {
     console.error('Error in emergency activation:', err);

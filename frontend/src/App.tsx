@@ -8,45 +8,25 @@ import Landing from './components/Page/Landing';
 import { Route, Routes } from 'react-router-dom';
 import Register from './components/Page/Register';
 import NotFound from './components/Page/Not-Found';
-import Guidlines from './components/Page/Guidlines';
+import Guidelines from './components/Page/Guidlines';
 import NewCase from './components/Page/Hospital/NewCase';
 import HomePatient from './components/Page/Patient/Home';
 import HomeHospital from './components/Page/Hospital/Home';
 import Emergency from './components/Page/Hospital/Emergency';
-import ReportsPatient from './components/Page/Patient/Reports';
 import ProfilePatient from './components/Page/Patient/Profile';
+import ReportsPatient from './components/Page/Patient/Reports';
+import HistoryHospital from './components/Page/Hospital/History';
 import ProtectedPatient from './components/Routes/protected/patient.route';
-import UnprotectedRoutes from './components/Routes/un-protected/unprotected';
 import ProtectedHospital from './components/Routes/protected/hospital.route';
 
 const App = () => {
   return (
     <Layout>
       <Routes>
-        <Route path="/" 
-          element={
-            <UnprotectedRoutes>
-              <Landing />
-            </UnprotectedRoutes>
-          }
-        />
+        <Route path="/" element={<Landing />} />
 
-        <Route
-          path="/login"
-          element={
-            <UnprotectedRoutes>
-              <Login />
-            </UnprotectedRoutes>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <UnprotectedRoutes>
-              <Register />
-            </UnprotectedRoutes>
-          }
-        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         <Route
           path="/patient/home"
@@ -85,7 +65,7 @@ const App = () => {
           path="/hospital/history"
           element={
             <ProtectedHospital>
-              <HomeHospital />
+              <HistoryHospital />
             </ProtectedHospital>
           }
         />
@@ -106,47 +86,19 @@ const App = () => {
           }
         />
         <Route
-          path="/hospital/guidlines"
+          path="/hospital/guidelines"
           element={
             <ProtectedHospital>
-              <Guidlines />
+              <Guidelines />
             </ProtectedHospital>
           }
         />
 
-        <Route
-          path="/too-fast"
-          element={
-            <UnprotectedRoutes>
-              <Fast />
-            </UnprotectedRoutes>
-          }
-        />
+        <Route path="/too-fast" element={<Fast />} />
 
-        <Route
-          path="/file-temp"
-          element={
-            <UnprotectedRoutes>
-              <FileStack />
-            </UnprotectedRoutes>
-          }
-        />
-        <Route
-          path="/image-temp"
-          element={
-            <UnprotectedRoutes>
-              <EditImages />
-            </UnprotectedRoutes>
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <UnprotectedRoutes>
-              <NotFound />
-            </UnprotectedRoutes>
-          }
-        />
+        <Route path="/file-temp" element={<FileStack />} />
+        <Route path="/image-temp" element={<EditImages />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Theme />
     </Layout>

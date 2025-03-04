@@ -1,15 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { Badge } from "@/components/ui/badge";
-import { useUserStore } from "@/components/store/userStore";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, TrendingUp, AlertTriangle, DollarSign, HeartPulse } from "lucide-react";
-import { useEffect } from "react";
+import { Badge } from '@/components/ui/badge';
+import { useUserStore } from '@/components/store/userStore';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { User, TrendingUp, AlertTriangle, DollarSign, HeartPulse } from 'lucide-react';
+import { useEffect } from 'react';
 
-const StatisticSection = ({ title, statistics, icon: Icon }: { title: string; statistics: string[]; icon: any }) => (
-  <motion.div 
+const StatisticSection = ({
+  title,
+  statistics,
+  icon: Icon,
+}: {
+  title: string;
+  statistics: string[];
+  icon: any;
+}) => (
+  <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5 }}
@@ -39,39 +47,39 @@ const HomePatient = () => {
 
   const statisticSections = [
     {
-      title: "Global Stroke Insights",
+      title: 'Global Stroke Insights',
       statistics: [
-        "15 million people suffer strokes annually worldwide",
-        "Stroke is the second leading cause of death globally",
-        "Every 2 seconds, someone in the world has a stroke",
-        "70% of strokes occur in low- and middle-income countries"
+        '15 million people suffer strokes annually worldwide',
+        'Stroke is the second leading cause of death globally',
+        'Every 2 seconds, someone in the world has a stroke',
+        '70% of strokes occur in low- and middle-income countries',
       ],
-      icon: TrendingUp
+      icon: TrendingUp,
     },
     {
-      title: "U.S. Stroke Landscape",
+      title: 'U.S. Stroke Landscape',
       statistics: [
-        "Nearly 800,000 strokes occur each year",
-        "1 stroke happens every 40 seconds",
-        "1 stroke-related death occurs every 3.5 minutes",
-        "Leading cause of long-term disability in the U.S."
+        'Nearly 800,000 strokes occur each year',
+        '1 stroke happens every 40 seconds',
+        '1 stroke-related death occurs every 3.5 minutes',
+        'Leading cause of long-term disability in the U.S.',
       ],
-      icon: HeartPulse
+      icon: HeartPulse,
     },
     {
-      title: "Economic Impact",
+      title: 'Economic Impact',
       statistics: [
-        "Stroke costs the U.S. $56.5 billion per year",
-        "Average cost per stroke survivor: $140,000+ over lifetime",
-        "Direct medical costs: $45.5 billion",
-        "Lost productivity: $11 billion"
+        'Stroke costs the U.S. $56.5 billion per year',
+        'Average cost per stroke survivor: $140,000+ over lifetime',
+        'Direct medical costs: $45.5 billion',
+        'Lost productivity: $11 billion',
       ],
-      icon: DollarSign
-    }
+      icon: DollarSign,
+    },
   ];
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -87,12 +95,24 @@ const HomePatient = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex flex-col gap-2">
-              <Badge variant="secondary" className="text-lg">Patient Code: {user._id}</Badge>
-              <Badge variant="secondary" className="text-lg">Patient ID: {user.patientId}</Badge>
-              <Badge variant="secondary" className="text-lg">Email: {user.email}</Badge>
-              <Badge variant="secondary" className="text-lg">Phone Number: {user.phoneNumber}</Badge>
-              <Badge variant="secondary" className="text-lg">Created At: {user.createdAt}</Badge>
-              <span className="ml-2 text-lg font-bold text-muted-foreground">Your health is our priority.</span>
+              <Badge variant="secondary" className="text-lg">
+                Patient Code: {user._id}
+              </Badge>
+              <Badge variant="secondary" className="text-lg">
+                Patient ID: {user.patientId}
+              </Badge>
+              <Badge variant="secondary" className="text-lg">
+                Email: {user.email}
+              </Badge>
+              <Badge variant="secondary" className="text-lg">
+                Phone Number: {user.phoneNumber}
+              </Badge>
+              <Badge variant="secondary" className="text-lg">
+                Created At: {user.createdAt}
+              </Badge>
+              <span className="ml-2 text-lg font-bold text-muted-foreground">
+                Your health is our priority.
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -117,7 +137,7 @@ const HomePatient = () => {
       </div>
 
       {/* Prevention & Recovery Section */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}

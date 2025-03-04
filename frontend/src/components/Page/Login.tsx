@@ -2,14 +2,20 @@ import axios from 'axios';
 import Loader from '../Loader';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import axiosInstance from '@/lib/axiosInstance';
-import { AlertCircle, LogIn, User, Lock, Mail } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AlertCircle, LogIn, User, Lock, Mail } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const Login = () => {
   const [userType, setUserType] = useState('patient');
@@ -23,8 +29,7 @@ const Login = () => {
     setLoading(true);
     setError('');
 
-    const endpoint =
-      userType === 'patient' ? '/patient/login' : '/hospital/login';
+    const endpoint = userType === 'patient' ? '/patient/login' : '/hospital/login';
 
     try {
       const response = await axiosInstance.post(endpoint, { email, password });
@@ -33,13 +38,13 @@ const Login = () => {
       if (data.Token) {
         localStorage.setItem('token', data.Token);
         toast.success('Login successful!');
-        window.location.href = "/register"
+        window.location.href = '/' + `${userType}` + '/home';
       } else {
         throw new Error('Token not received from API.');
       }
     } catch (err) {
       console.error('Login error:', err);
-      const errorMessage = axios.isAxiosError(err) 
+      const errorMessage = axios.isAxiosError(err)
         ? err.response?.data?.message || err.message || 'An error occurred during login.'
         : (err as Error).message || 'An error occurred during login.';
       setError(errorMessage);
@@ -61,9 +66,7 @@ const Login = () => {
             <LogIn className="w-8 h-8 text-primary" />
             <span className="text-2xl font-bold">Login</span>
           </CardTitle>
-          <CardDescription>
-            Select your user type and enter your credentials
-          </CardDescription>
+          <CardDescription>Select your user type and enter your credentials</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -76,9 +79,7 @@ const Login = () => {
                 <SelectTrigger>
                   <SelectValue placeholder="Select user type" />
                 </SelectTrigger>
-                <SelectContent
-                  className='bg-black/100'
-                >
+                <SelectContent className="bg-black/100">
                   <SelectItem value="patient">Patient</SelectItem>
                   <SelectItem value="hospital">Hospital</SelectItem>
                 </SelectContent>
@@ -125,11 +126,7 @@ const Login = () => {
               </Alert>
             )}
 
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Processing...' : 'Login'}
             </Button>
           </form>

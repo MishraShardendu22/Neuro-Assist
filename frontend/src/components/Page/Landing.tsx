@@ -1,14 +1,14 @@
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, ArrowRight } from "lucide-react";
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { CheckCircle, ArrowRight } from 'lucide-react';
 
 const Landing = () => {
   const navigate = useNavigate();
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
   };
 
   const staggerContainer = {
@@ -16,9 +16,9 @@ const Landing = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   return (
@@ -47,19 +47,17 @@ const Landing = () => {
             className="mt-8 flex flex-col sm:flex-row justify-center gap-6"
           >
             <Button
-              onClick={() => navigate("/login")}
+              onClick={() => navigate('/login')}
               className="px-8 py-4 text-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
             >
-              Login{" "}
-              <ArrowRight className="ml-2 h-6 w-6 cursor-pointer" />
+              Login <ArrowRight className="ml-2 h-6 w-6 cursor-pointer" />
             </Button>
             <Button
-              onClick={() => navigate("/register")}
+              onClick={() => navigate('/register')}
               variant="secondary"
               className="px-8 py-4 text-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
             >
-              Register{" "}
-              <ArrowRight className="ml-2 h-6 w-6 cursor-pointer" />
+              Register <ArrowRight className="ml-2 h-6 w-6 cursor-pointer" />
             </Button>
           </motion.div>
         </motion.div>
@@ -69,7 +67,7 @@ const Landing = () => {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
           variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
           transition={{ duration: 0.6 }}
         >
@@ -81,16 +79,16 @@ const Landing = () => {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: true, margin: '-50px' }}
             className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {[
-              "Seamless user experience",
-              "Fast and secure transactions",
-              "24/7 customer support",
-              "Cutting-edge technology",
-              "User-friendly interface",
-              "Trusted by thousands"
+              'Seamless user experience',
+              'Fast and secure transactions',
+              '24/7 customer support',
+              'Cutting-edge technology',
+              'User-friendly interface',
+              'Trusted by thousands',
             ].map((feature, index) => (
               <motion.div
                 key={index}
@@ -109,7 +107,7 @@ const Landing = () => {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
           variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           transition={{ duration: 0.6 }}
         >
@@ -125,7 +123,7 @@ const Landing = () => {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
           variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           transition={{ duration: 0.6 }}
         >
@@ -163,7 +161,7 @@ const Landing = () => {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
           variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           transition={{ duration: 0.6 }}
         >
@@ -175,16 +173,16 @@ const Landing = () => {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: true, margin: '-50px' }}
             className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {[
-              "Ischemic stroke accounts for 87% of all stroke cases",
-              "Hemorrhagic stroke constitutes about 13% of stroke cases",
-              "Stroke risk doubles every decade after 55",
-              "Early intervention reduces long-term disability",
-              "Rehabilitation significantly improves recovery outcomes",
-              "Public awareness can reduce stroke risk factors"
+              'Ischemic stroke accounts for 87% of all stroke cases',
+              'Hemorrhagic stroke constitutes about 13% of stroke cases',
+              'Stroke risk doubles every decade after 55',
+              'Early intervention reduces long-term disability',
+              'Rehabilitation significantly improves recovery outcomes',
+              'Public awareness can reduce stroke risk factors',
             ].map((item, index) => (
               <motion.div
                 key={index}

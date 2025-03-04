@@ -41,9 +41,26 @@ export interface IDocument extends Document {
   caseId: Types.ObjectId;
   patientId: Types.ObjectId;
   hospitalId: Types.ObjectId;
-  documentType: 'pdf' | 'doc' | 'csv' | 'ppt' | 'txt' | 'xls' | 'pptx' | 'docx' | 'xlsx' | 'png' | 'jpeg' | 'jpg' | 'mp4' | 'avi' | 'mov' | 'mkv' | 'image' | 'video';
+  documentType:
+    | 'pdf'
+    | 'doc'
+    | 'csv'
+    | 'ppt'
+    | 'txt'
+    | 'xls'
+    | 'pptx'
+    | 'docx'
+    | 'xlsx'
+    | 'png'
+    | 'jpeg'
+    | 'jpg'
+    | 'mp4'
+    | 'avi'
+    | 'mov'
+    | 'mkv'
+    | 'image'
+    | 'video';
 }
-
 
 export interface IReport extends Document {
   BP?: string;

@@ -1,10 +1,24 @@
-import { useEffect, useState } from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Clock, FileText, Stethoscope, HeartPulse, Droplet } from "lucide-react";
-import axiosInstance from "@/lib/axiosInstance";
-import toast from "react-hot-toast";
+import { useEffect, useState } from 'react';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Clock, FileText, Stethoscope, HeartPulse, Droplet } from 'lucide-react';
+import axiosInstance from '@/lib/axiosInstance';
+import toast from 'react-hot-toast';
 
 interface Report {
   _id: string;
@@ -32,30 +46,30 @@ const Reports = () => {
     try {
       const res = await axiosInstance.get(`/patient/report/${id}`, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       });
       setReport(res.data.Data);
-      toast.success("Report loaded successfully!");
+      toast.success('Report loaded successfully!');
     } catch (error) {
-      toast.error("Failed to fetch report.");
-      console.error("Error fetching report:", error);
+      toast.error('Failed to fetch report.');
+      console.error('Error fetching report:', error);
     }
   };
 
   useEffect(() => {
     const getReports = async () => {
       try {
-        const res = await axiosInstance.get("/patient/report", {
+        const res = await axiosInstance.get('/patient/report', {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
           },
         });
         setReports(res.data.Data || []);
-        toast.success("Reports loaded successfully!");
+        toast.success('Reports loaded successfully!');
       } catch (error) {
-        toast.error("Failed to fetch reports.");
-        console.error("Error fetching reports:", error);
+        toast.error('Failed to fetch reports.');
+        console.error('Error fetching reports:', error);
       }
     };
     getReports();
@@ -99,14 +113,14 @@ const Reports = () => {
                 <div className="flex items-center space-x-2">
                   <HeartPulse className="w-4 h-4 text-muted-foreground" />
                   <p className="text-sm truncate">
-                    Symptoms: {report.symptoms.slice(0, 3).join(", ")}
-                    {report.symptoms.length > 3 && "..."}
+                    Symptoms: {report.symptoms.slice(0, 3).join(', ')}
+                    {report.symptoms.length > 3 && '...'}
                   </p>
                 </div>
               </CardContent>
               <CardFooter>
-                <Button 
-                  onClick={() => openModal(report._id)} 
+                <Button
+                  onClick={() => openModal(report._id)}
                   className="w-full"
                   variant="secondary"
                 >
@@ -120,8 +134,8 @@ const Reports = () => {
 
       {totalPages > 1 && (
         <div className="flex justify-center items-center space-x-4 mt-6">
-          <Button 
-            onClick={() => setCurrentPage(currentPage - 1)} 
+          <Button
+            onClick={() => setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1}
             variant="outline"
           >
@@ -130,8 +144,8 @@ const Reports = () => {
           <span className="text-muted-foreground">
             Page {currentPage} of {totalPages}
           </span>
-          <Button 
-            onClick={() => setCurrentPage(currentPage + 1)} 
+          <Button
+            onClick={() => setCurrentPage(currentPage + 1)}
             disabled={currentPage === totalPages}
             variant="outline"
           >
@@ -152,27 +166,44 @@ const Reports = () => {
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex items-center space-x-2">
                     <Stethoscope className="w-4 h-4 text-muted-foreground" />
-                    <p><strong>Case ID:</strong> {report.caseId}</p>
+                    <p>
+                      <strong>Case ID:</strong> {report.caseId}
+                    </p>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Droplet className="w-4 h-4 text-muted-foreground" />
-                    <p><strong>BP:</strong> {report.BP}</p>
+                    <p>
+                      <strong>BP:</strong> {report.BP}
+                    </p>
                   </div>
                   <div className="flex items-center space-x-2">
                     <HeartPulse className="w-4 h-4 text-muted-foreground" />
-                    <p><strong>HR:</strong> {report.HR}</p>
+                    <p>
+                      <strong>HR:</strong> {report.HR}
+                    </p>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <p><strong>Symptoms:</strong> {report.symptoms.join(", ")}</p>
-                  <p><strong>O₂ Saturation:</strong> {report.O2_Saturation}</p>
-                  <p><strong>Last Normal:</strong> {new Date(report.timeOfLastNormal).toLocaleString()}</p>
-                  <p><strong>Created At:</strong> {new Date(report.createdAt).toLocaleString()}</p>
+                  <p>
+                    <strong>Symptoms:</strong> {report.symptoms.join(', ')}
+                  </p>
+                  <p>
+                    <strong>O₂ Saturation:</strong> {report.O2_Saturation}
+                  </p>
+                  <p>
+                    <strong>Last Normal:</strong>{' '}
+                    {new Date(report.timeOfLastNormal).toLocaleString()}
+                  </p>
+                  <p>
+                    <strong>Created At:</strong> {new Date(report.createdAt).toLocaleString()}
+                  </p>
                 </div>
               </DialogDescription>
             </DialogHeader>
             <DialogClose asChild>
-              <Button variant="secondary" className="w-full">Close</Button>
+              <Button variant="secondary" className="w-full">
+                Close
+              </Button>
             </DialogClose>
           </DialogContent>
         </Dialog>

@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { HospitalMiddleware } from '../../middleware/hospital.middleware';import {
+import { HospitalMiddleware } from '../../middleware/hospital.middleware';
+import {
   postDocument,
   getDocumentOne,
   updateDocument,

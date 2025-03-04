@@ -1,9 +1,5 @@
 const Emergency = () => {
-  return (
-    <div>
-      hi
-    </div>
-  )
-}
+  return <div>hi</div>;
+};
 
-export default Emergency
+export default Emergency;

@@ -35,7 +35,7 @@ export const HospitalMiddleware = (req: Request, res: Response, next: NextFuncti
         apiResponse(res, 403, 'Forbidden');
       }
     });
-    
+
     console.log('CP-H-M-5');
     next();
   } catch (error) {
