@@ -10,41 +10,47 @@ interface ProtectedHospitalProps {
 }
 
 const ProtectedHospital: React.FC<ProtectedHospitalProps> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const setUser = useUserStore((state: any) => state.setUser);
   const navigate = useNavigate();
+  const setUser = useUserStore((state: any) => state.setUser);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+
 
   useEffect(() => {
+    let isMounted = true;
     const checkAuthentication = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        setIsAuthenticated(false);
+        if (isMounted) setIsAuthenticated(false);
         return;
       }
 
       try {
         const response = await axiosInstance.get('/hospital/verifyHospital', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
+        if (!isMounted) return;
+
         if (response.status === 200) {
-          setUser(response.data.data);
+          setUser(response.data.Data);
           setIsAuthenticated(true);
         } else if (response.status === 429) {
           navigate('/too-fast');
         } else {
           setIsAuthenticated(false);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Authentication check failed:', error);
-        setIsAuthenticated(false);
+        if (isMounted) setIsAuthenticated(false);
       }
     };
 
     checkAuthentication();
-  }, [setUser]);
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   if (isAuthenticated === null) {
     return <Loader />;

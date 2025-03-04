@@ -1,5 +1,6 @@
 import axiosInstance from '@/lib/axiosInstance';
 import { useState } from 'react';
+import Loader from '../Loader';
 
 const Register = () => {
   const [userType, setUserType] = useState('patient'); // Default selection
@@ -42,6 +43,10 @@ const Register = () => {
       setLoading(false);
     }
   };
+
+  if(loading){
+    return <Loader />
+  }
 
   return (
     <div style={{

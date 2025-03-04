@@ -1,71 +1,85 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { ReactNode, useEffect, useState } from 'react';
-import { useUserStore } from '@/components/store/userStore';
-import axiosInstance from '@/lib/axiosInstance';
-import { Navigate } from 'react-router-dom';
 import Loader from '@/components/Loader';
+import { Navigate } from 'react-router-dom';
+import axiosInstance from '@/lib/axiosInstance';
+import { useUserStore } from '@/components/store/userStore';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 interface UnprotectedRoutesProps {
   children: ReactNode;
 }
 
 const UnprotectedRoutes: React.FC<UnprotectedRoutesProps> = ({ children }) => {
-  const [isUnauthenticated, setIsUnauthenticated] = useState<boolean | null>(null);
-  const [rateLimited, setRateLimited] = useState<boolean>(false);
+  const user = useUserStore((state: any) => state.user);
   const setUser = useUserStore((state: any) => state.setUser);
+  const [rateLimited, setRateLimited] = useState<boolean>(false);
+  const [isUnauthenticated, setIsUnauthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const checkAuthentication = async () => {
       const token = localStorage.getItem('token');
+      console.log('Stored Token:', token);
+
       if (!token) {
-        setIsUnauthenticated(true);
+        if (isMounted) setIsUnauthenticated(true);
         return;
       }
 
+      let authenticatedUser = null;
+
       try {
-        const results = await Promise.allSettled([
-          axiosInstance.get('/hospital/verifyHospital', {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axiosInstance.get('/patient/verifyPatient', {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
+        const hospitalResponse = await axiosInstance.post(
+          '/hospital/verifyHospital',
+          {},
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-        const hospitalResult = results[0];
-        const patientResult = results[1];
-
-        // Immediate redirection if rate limiting is detected
-        if (
-          (hospitalResult.status === 'rejected' &&
-            (hospitalResult.reason as any)?.response?.status === 429) ||
-          (patientResult.status === 'rejected' &&
-            (patientResult.reason as any)?.response?.status === 429)
-        ) {
+        if (hospitalResponse.status === 200 && isMounted) {
+          authenticatedUser = hospitalResponse.data.Data;
+          console.log('Authenticated Hospital:', authenticatedUser);
+        }
+      } catch (error: any) {
+        if (error.response?.status === 429) {
           setRateLimited(true);
           return;
         }
+      }
 
-        let isAuthenticated = false;
+      if (!authenticatedUser) {
+        try {
+          const patientResponse = await axiosInstance.post(
+            '/patient/verifyPatient',
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
 
-        if (hospitalResult.status === 'fulfilled' && hospitalResult.value.status === 200) {
-          setUser(hospitalResult.value.data.data);
-          isAuthenticated = true;
+          if (patientResponse.status === 200 && isMounted) {
+            authenticatedUser = patientResponse.data.Data;
+            console.log('Authenticated Patient:', authenticatedUser);
+          }
+        } catch (error: any) {
+          if (error.response?.status === 429) {
+            setRateLimited(true);
+            return;
+          }
         }
+      }
 
-        if (patientResult.status === 'fulfilled' && patientResult.value.status === 200) {
-          setUser(patientResult.value.data.data);
-          isAuthenticated = true;
-        }
-
-        setIsUnauthenticated(!isAuthenticated);
-      } catch (error) {
-        console.error('Error during authentication check:', error);
+      if (authenticatedUser) {
+        setUser(authenticatedUser);
+        setIsUnauthenticated(false);
+      } else {
         setIsUnauthenticated(true);
       }
     };
 
     checkAuthentication();
+
+    return () => {
+      isMounted = false;
+    };
   }, [setUser]);
 
   if (rateLimited) {
@@ -77,7 +91,7 @@ const UnprotectedRoutes: React.FC<UnprotectedRoutesProps> = ({ children }) => {
   }
 
   if (!isUnauthenticated) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to={user?.role === 'Hospital' ? "/hospital/home" : "/patient/home"} />;
   }
 
   return <>{children}</>;

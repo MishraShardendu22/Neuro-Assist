@@ -1,49 +1,55 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Loader from '@/components/Loader';
+import { Navigate } from 'react-router-dom';
 import axiosInstance from '@/lib/axiosInstance';
-import { Navigate, useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/components/store/userStore';
 import React, { ReactNode, useEffect, useState } from 'react';
 
-interface ProtectedHospitalProps {
+interface ProtectedPatientProps {
   children: ReactNode;
 }
 
-const ProtectedPatient: React.FC<ProtectedHospitalProps> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+const ProtectedPatient: React.FC<ProtectedPatientProps> = ({ children }) => {
   const setUser = useUserStore((state: any) => state.setUser);
-  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
     const checkAuthentication = async () => {
       const token = localStorage.getItem('token');
+      console.log("The Token is:",token);
+
       if (!token) {
-        setIsAuthenticated(false);
+        if (isMounted) setIsAuthenticated(false);
         return;
       }
 
       try {
         const response = await axiosInstance.get('/patient/verifyPatient', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
+        console.log("The response is:", response);
+
+        if (!isMounted) return;
+
         if (response.status === 200) {
-          setUser(response.data.data);
+          setUser(response.data.Data);
           setIsAuthenticated(true);
-          navigate('/too-fast');
         } else {
           setIsAuthenticated(false);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Authentication check failed:', error);
-        setIsAuthenticated(false);
+        if (isMounted) setIsAuthenticated(false);
       }
     };
 
     checkAuthentication();
-  }, [setUser]);
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   if (isAuthenticated === null) {
     return <Loader />;

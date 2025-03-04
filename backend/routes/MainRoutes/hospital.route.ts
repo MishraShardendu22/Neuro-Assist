@@ -4,9 +4,10 @@ import { login, register, verifyHospital, emergencyActivate } from '../../contro
 
 const HospitalRouter = Router();
 
+HospitalRouter.get('/verifyHospital', HospitalMiddleware, verifyHospital);
+
 HospitalRouter.post('/login', login);
 HospitalRouter.post('/register', register);
-HospitalRouter.post('/verifyHospital', HospitalMiddleware, verifyHospital);
 HospitalRouter.post('/emergencyActivate', HospitalMiddleware, emergencyActivate);
 
 export { HospitalRouter };

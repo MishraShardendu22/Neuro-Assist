@@ -1,10 +1,11 @@
 import axiosInstance from '@/lib/axiosInstance';
 import axios from 'axios';
 import { useState } from 'react';
+import Loader from '../Loader';
 
 
 const Login = () => {
-  const [userType, setUserType] = useState('patient'); // Default selection
+  const [userType, setUserType] = useState('patient');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,6 @@ const Login = () => {
     setLoading(true);
     setError('');
 
-    // Define the endpoint based on the selected user type
     const endpoint =
       userType === 'patient' ? '/patient/login' : '/hospital/login';
 
@@ -40,6 +40,10 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  if(loading){
+    return <Loader />
+  } 
 
   return (
     <div style={{

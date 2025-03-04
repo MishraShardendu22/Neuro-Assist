@@ -4,12 +4,12 @@ import { NextFunction, Request, Response } from 'express';
 
 export const PatientMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log('CP-M-0');
     const token = req.header('Authorization')?.split(' ')[1];
+    console.log('CP-M-0');
+    console.log('Token: ', token);
     if (!token) {
       return apiResponse(res, 401, 'Unauthorized');
     }
-    console.log('Token: ', token);
     console.log('CP-M-1');
 
     jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {

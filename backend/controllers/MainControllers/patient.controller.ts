@@ -100,8 +100,8 @@ const verifyPatient = async (req: Request, res: Response) => {
   try {
     console.log('CP-1');
     const { patientId, role } = req.body;
-    console.log(patientId);
-    console.log(role);
+    // console.log(patientId);
+    // console.log(role);
 
     console.log('CP-2');
     if (!role || role !== 'Patient') {

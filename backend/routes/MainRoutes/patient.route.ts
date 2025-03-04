@@ -12,10 +12,10 @@ import { PatientMiddleware } from '../../middleware/patient.middleware';
 
 const PatientRouter = Router();
 
+PatientRouter.put('/profile', PatientMiddleware, updateProfile);
+
 PatientRouter.post('/login', loginP);
 PatientRouter.post('/register', registerP);
-
-PatientRouter.put('/profile', PatientMiddleware, updateProfile);
 
 PatientRouter.get('/profile', PatientMiddleware, getProfile);
 PatientRouter.get('/report', PatientMiddleware, getReportAll);

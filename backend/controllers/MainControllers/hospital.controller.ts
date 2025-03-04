@@ -40,7 +40,9 @@ const register = async (req: Request, res: Response) => {
     return apiResponse(res, 201, 'Hospital Registered Successfully', newHospital);
   } catch (err) {
     console.error('Error registering hospital:', err);
-    return apiResponse(res, 500, 'Internal Server Error');
+    if (!res.headersSent) {
+      return apiResponse(res, 500, 'Internal Server Error');
+    }
   }
 };
 
@@ -75,23 +77,30 @@ const login = async (req: Request, res: Response) => {
     return apiResponse(res, 200, 'Hospital Logged In Successfully', hospital, token);
   } catch (err) {
     console.error('Error logging in hospital:', err);
-    return apiResponse(res, 500, 'Internal Server Error');
+    if (!res.headersSent) {
+      return apiResponse(res, 500, 'Internal Server Error');
+    }
   }
 };
 
 const verifyHospital = async (req: Request, res: Response) => {
   try {
+    console.log('CP-H-1');
     const { hospitalId } = req.body;
 
+    console.log('CP-H-2');
     const hospital = await Hospital.findById(hospitalId);
     if (!hospital) {
       return apiResponse(res, 404, 'Hospital not found');
     }
 
+    console.log('CP-H-3');
     return apiResponse(res, 200, 'Hospital Verified Successfully', hospital);
   } catch (err) {
-    console.error('Error verifying hospital:', err);
-    return apiResponse(res, 500, 'Internal Server Error');
+    console.log('Error verifying hospital:', err);
+    if (!res.headersSent) {
+      return apiResponse(res, 500, 'Internal Server Error');
+    }
   }
 };
 
@@ -139,7 +148,9 @@ const emergencyActivate = async (req: Request, res: Response) => {
     return apiResponse(res, 201, 'Report Created Successfully', newReport);
   } catch (err) {
     console.error('Error in emergency activation:', err);
-    return apiResponse(res, 500, 'Internal Server Error');
+    if (!res.headersSent) {
+      return apiResponse(res, 500, 'Internal Server Error');
+    }
   }
 };
 
