@@ -23,7 +23,13 @@ const App = () => {
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" 
+          element={
+            <UnprotectedRoutes>
+              <Landing />
+            </UnprotectedRoutes>
+          }
+        />
 
         <Route
           path="/login"

@@ -1,18 +1,20 @@
-import axiosInstance from '@/lib/axiosInstance';
-import { useState } from 'react';
 import Loader from '../Loader';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { Button } from '../ui/button';
+import axiosInstance from '@/lib/axiosInstance';
 
 const Register = () => {
-  const [userType, setUserType] = useState('patient'); // Default selection
-  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [gender, setGender] = useState('Male'); // Patient-specific
-  const [address, setAddress] = useState(''); // Hospital-specific
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [address, setAddress] = useState(''); 
+  const [gender, setGender] = useState('Male');
+  const [fullName, setFullName] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [userType, setUserType] = useState('patient');
 
   const handleRegister = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -20,10 +22,8 @@ const Register = () => {
     setError('');
     setMessage('');
 
-    // Determine the registration endpoint based on user type
     const endpoint = userType === 'patient' ? '/patient/register' : '/hospital/register';
 
-    // Construct the payload dynamically
     const payload = {
       fullName,
       email,
@@ -36,9 +36,12 @@ const Register = () => {
       const response = await axiosInstance.post(endpoint, payload);
       console.log('Registration success:', response.data);
       setMessage('Registration successful. Please proceed to login.');
+      toast.success('Registration successful. Please proceed to login.');
+      window.location.href = '/login';
     } catch (err) {
       console.error('Registration error:', err);
       setError('Registration failed.');
+      toast.error('Registration Error.');
     } finally {
       setLoading(false);
     }
@@ -177,20 +180,13 @@ const Register = () => {
           </div>
         )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '10px',
-            backgroundColor: '#007BFF',
-            color: '#fff',
-            border: 'none',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {loading ? 'Processing...' : 'Register'}
-        </button>
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={loading}
+            >
+              {loading ? 'Processing...' : 'Register'}
+            </Button>
       </form>
     </div>
   );

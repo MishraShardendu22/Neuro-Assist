@@ -57,9 +57,9 @@ const Footer = () => {
               className="p-4 rounded-full bg-muted dark:bg-muted"
             >
               <img
-                src="/Logo/PNG/main-logo-transparent.png"
+                src="/Logo/PNG/main-logo-white-transparent.png"
                 alt="Shardendu Mishra"
-                className="w-46 h-46 rounded-full"
+                className="w-26 h-26 rounded-full"
               />
             </div>
           </div>

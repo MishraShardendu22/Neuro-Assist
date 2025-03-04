@@ -129,6 +129,7 @@ const verifyPatient = async (req: Request, res: Response) => {
 const getReportAll = async (req: Request, res: Response) => {
   try {
     const { patientId } = req.body;
+    console.log(patientId);
     const reports = await Report.find({ patientId: patientId });
 
     return apiResponse(res, 200, 'Reports Found Successfully', reports);
@@ -142,7 +143,7 @@ const getReportOne = async (req: Request, res: Response) => {
   try {
     const { patientId } = req.body;
     const reportId = req.params.id;
-    const report = await Report.findOne({ patientId: patientId, reportId });
+    const report = await Report.findOne({ patientId: patientId, _id: reportId });
 
     if (!report) {
       return apiResponse(res, 404, 'Report not found');

@@ -1,8 +1,15 @@
-import axiosInstance from '@/lib/axiosInstance';
 import axios from 'axios';
-import { useState } from 'react';
 import Loader from '../Loader';
-
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import axiosInstance from '@/lib/axiosInstance';
+import { AlertCircle, LogIn, User, Lock, Mail } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Login = () => {
   const [userType, setUserType] = useState('patient');
@@ -11,7 +18,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = async (e: { preventDefault: () => void; }) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -25,101 +32,109 @@ const Login = () => {
 
       if (data.Token) {
         localStorage.setItem('token', data.Token);
-
+        toast.success('Login successful!');
+        window.location.href = "/register"
       } else {
         throw new Error('Token not received from API.');
       }
     } catch (err) {
       console.error('Login error:', err);
-      if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || err.message || 'An error occurred during login.');
-      } else {
-        setError((err as Error).message || 'An error occurred during login.');
-      }
+      const errorMessage = axios.isAxiosError(err) 
+        ? err.response?.data?.message || err.message || 'An error occurred during login.'
+        : (err as Error).message || 'An error occurred during login.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  if(loading){
-    return <Loader />
-  } 
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
-    <div style={{
-      maxWidth: '400px',
-      margin: '2rem auto',
-      padding: '1rem',
-      border: '1px solid #ccc'
-    }}>
-      <h2 style={{ textAlign: 'center' }}>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="userType" style={{ display: 'block', marginBottom: '0.5rem' }}>
-            User Type
-          </label>
-          <select
-            id="userType"
-            value={userType}
-            onChange={(e) => setUserType(e.target.value)}
-            style={{ width: '100%', padding: '8px' }}
-          >
-            <option value="patient">Patient</option>
-            <option value="hospital">Hospital</option>
-          </select>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="text-center">
+          <CardTitle className="flex items-center justify-center space-x-2 mb-2">
+            <LogIn className="w-8 h-8 text-primary" />
+            <span className="text-2xl font-bold">Login</span>
+          </CardTitle>
+          <CardDescription>
+            Select your user type and enter your credentials
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <Label htmlFor="userType" className="flex items-center space-x-2 mb-2">
+                <User className="w-4 h-4 text-muted-foreground" />
+                <span>User Type</span>
+              </Label>
+              <Select value={userType} onValueChange={setUserType}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select user type" />
+                </SelectTrigger>
+                <SelectContent
+                  className='bg-black/100'
+                >
+                  <SelectItem value="patient">Patient</SelectItem>
+                  <SelectItem value="hospital">Hospital</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="email" style={{ display: 'block', marginBottom: '0.5rem' }}>
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: '100%', padding: '8px' }}
-            required
-          />
-        </div>
+            <div>
+              <Label htmlFor="email" className="flex items-center space-x-2 mb-2">
+                <Mail className="w-4 h-4 text-muted-foreground" />
+                <span>Email</span>
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full"
+              />
+            </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="password" style={{ display: 'block', marginBottom: '0.5rem' }}>
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: '100%', padding: '8px' }}
-            required
-          />
-        </div>
+            <div>
+              <Label htmlFor="password" className="flex items-center space-x-2 mb-2">
+                <Lock className="w-4 h-4 text-muted-foreground" />
+                <span>Password</span>
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full"
+              />
+            </div>
 
-        {error && (
-          <div style={{ color: 'red', marginBottom: '1rem' }}>
-            {error}
-          </div>
-        )}
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '10px',
-            backgroundColor: '#007BFF',
-            color: '#fff',
-            border: 'none',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {loading ? 'Processing...' : 'Login'}
-        </button>
-      </form>
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={loading}
+            >
+              {loading ? 'Processing...' : 'Login'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

@@ -1,5 +1,11 @@
 const HomeHospital = () => {
-  return <div>Hi Hospital</div>;
+  return (
+    <div>
+      <div>
+        <h1>Home Hospital</h1>
+      </div>
+    </div>
+  );
 };
 
 export default HomeHospital;
