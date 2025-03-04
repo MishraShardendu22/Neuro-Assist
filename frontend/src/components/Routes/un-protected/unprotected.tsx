@@ -30,9 +30,8 @@ const UnprotectedRoutes: React.FC<UnprotectedRoutesProps> = ({ children }) => {
       let authenticatedUser = null;
 
       try {
-        const hospitalResponse = await axiosInstance.post(
+        const hospitalResponse = await axiosInstance.get(
           '/hospital/verifyHospital',
-          {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -49,9 +48,8 @@ const UnprotectedRoutes: React.FC<UnprotectedRoutesProps> = ({ children }) => {
 
       if (!authenticatedUser) {
         try {
-          const patientResponse = await axiosInstance.post(
+          const patientResponse = await axiosInstance.get(
             '/patient/verifyPatient',
-            {},
             { headers: { Authorization: `Bearer ${token}` } }
           );
 

@@ -94,7 +94,7 @@ const Header = () => {
                 <Button 
                   variant="outline" 
                   className="hover:bg-secondary hover:text-secondary-foreground"
-                  onClick={() => navigate('/guidelines')}
+                  onClick={() => navigate('/hospital/guidelines')}
                 >
                   <HeartPulseIcon className="mr-2 h-4 w-4" />
                   Guidelines
