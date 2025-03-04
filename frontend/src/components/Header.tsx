@@ -16,6 +16,7 @@ const Header = () => {
   const location = useLocation();
   const user = useUserStore((state: any) => state.user);
   const resetUser = useUserStore((state: any) => state.resetUser);
+  const userRole = user?.role;
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -29,7 +30,7 @@ const Header = () => {
         <Button
           variant="ghost"
           className="text-xl font-bold hover:bg-muted"
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/' + userRole.toLowerCase() + '/home')}
         >
           Neuro - Assist
         </Button>
