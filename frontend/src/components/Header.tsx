@@ -4,7 +4,6 @@ import {
   UserIcon,
   HistoryIcon,
   FilePlusIcon,
-  AmbulanceIcon,
   HeartPulseIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -77,14 +76,6 @@ const Header = () => {
               >
                 <FilePlusIcon className="mr-2 h-4 w-4" />
                 New Cases
-              </Button>
-              <Button
-                variant="outline"
-                className="hover:bg-secondary hover:text-secondary-foreground"
-                onClick={() => navigate('/hospital/emergency')}
-              >
-                <AmbulanceIcon className="mr-2 h-4 w-4" />
-                Emergency Admit
               </Button>
               <Button
                 variant="outline"
