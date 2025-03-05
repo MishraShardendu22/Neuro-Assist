@@ -12,7 +12,6 @@ import Guidelines from './components/Page/Guidlines';
 import NewCase from './components/Page/Hospital/NewCase';
 import HomePatient from './components/Page/Patient/Home';
 import HomeHospital from './components/Page/Hospital/Home';
-import Emergency from './components/Page/Hospital/Emergency';
 import ProfilePatient from './components/Page/Patient/Profile';
 import ReportsPatient from './components/Page/Patient/Reports';
 import HistoryHospital from './components/Page/Hospital/History';
@@ -74,14 +73,6 @@ const App = () => {
           element={
             <ProtectedHospital>
               <NewCase />
-            </ProtectedHospital>
-          }
-        />
-        <Route
-          path="/hospital/emergency"
-          element={
-            <ProtectedHospital>
-              <Emergency />
             </ProtectedHospital>
           }
         />

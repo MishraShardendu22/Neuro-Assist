@@ -11,6 +11,9 @@ const postCase = async (req: Request, res: Response) => {
       return apiResponse(res, 400, 'All fields are required');
     }
 
+    const patient = await Patient.findById(patientId);
+    const name = patient?.fullName;
+
     const hospitalExist = await Hospital.findById(hospitalId);
     if (!hospitalExist) {
       return apiResponse(res, 404, 'Hospital does not exist');
@@ -22,6 +25,7 @@ const postCase = async (req: Request, res: Response) => {
     }
 
     const newCase = await Case.create({
+      caseName: `Case for ${name}`,
       patientId,
       hospitalId,
       status: 'Pending',
@@ -39,7 +43,7 @@ const postCase = async (req: Request, res: Response) => {
 
 const getAllCases = async (req: Request, res: Response) => {
   try {
-    const { hospitalId } = req.body; // Ensure hospitalId is required in the request body
+    const { hospitalId } = req.body;
     if (!hospitalId) return apiResponse(res, 400, 'Hospital ID is required');
 
     const hospitalExist = await Hospital.findById(hospitalId).populate('cases');

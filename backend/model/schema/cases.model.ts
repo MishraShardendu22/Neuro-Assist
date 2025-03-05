@@ -3,6 +3,10 @@ import { ICase } from '../Type/data.type';
 
 export const caseSchema: Schema<ICase> = new Schema(
   {
+    caseName: {
+      type: String,
+      required: [true, 'Case Name is required'],
+    },
     patientId: {
       type: Schema.Types.ObjectId,
       ref: 'Patient',

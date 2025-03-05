@@ -26,6 +26,7 @@ export interface IHospital extends Document {
 }
 
 export interface ICase extends Document {
+  caseName: string;
   createdAt?: Date;
   updatedAt?: Date;
   patientId: Types.ObjectId;
