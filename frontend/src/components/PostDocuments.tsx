@@ -1,8 +1,40 @@
-/* PostDocument.tsx */
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { 
+  Card, 
+  CardContent, 
+  CardHeader, 
+  CardTitle 
+} from "@/components/ui/card";
+import { 
+  Form, 
+  FormControl, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { 
+  FileUp, 
+  FileText, 
+  Tags, 
+  User, 
+  Folder 
+} from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import axiosInstance from "@/lib/axiosInstance";
 import toast from "react-hot-toast";
-import { Button } from "@/components/ui/button";
+
+// Zod schema for form validation
+const documentSchema = z.object({
+  patientId: z.string().optional(),
+  documentUrl: z.string().url("Invalid URL"),
+  documentType: z.string().min(1, "Document type is required"),
+  documentName: z.string().min(1, "Document name is required")
+});
 
 interface PostDocumentProps {
   selectedPatientId: string | null;
@@ -17,34 +49,34 @@ const PostDocument: React.FC<PostDocumentProps> = ({
   fileUrl,
   onDocumentCreated,
 }) => {
-  const [documentData, setDocumentData] = useState({
-    patientId: "",
-    documentUrl: "",
-    documentType: "",
-    documentName: "",
+  const form = useForm({
+    resolver: zodResolver(documentSchema),
+    defaultValues: {
+      patientId: selectedPatientId || "",
+      documentUrl: fileUrl || "",
+      documentType: "",
+      documentName: ""
+    }
   });
 
-  // Automatically update documentUrl when fileUrl prop changes
+  // Update form when fileUrl changes
   useEffect(() => {
     if (fileUrl) {
-      setDocumentData((prevData) => ({ ...prevData, documentUrl: fileUrl }));
+      form.setValue("documentUrl", fileUrl);
     }
-  }, [fileUrl]);
+  }, [fileUrl, form]);
 
-  const makeDocument = async () => {
-    // Prioritize the fileUrl from Filestack; if not present, fallback to manual input
-    const finalDocumentUrl = fileUrl || documentData.documentUrl;
-    if (!finalDocumentUrl) {
+  const makeDocument = async (data: z.infer<typeof documentSchema>) => {
+    if (!data.documentUrl) {
       toast.error("Please upload an image to obtain a document URL");
       return;
     }
+
     const payload = {
       caseId: caseId,
-      documentUrl: finalDocumentUrl,
-      documentType: documentData.documentType,
-      documentName: documentData.documentName,
-      patientId: selectedPatientId || documentData.patientId,
+      ...data
     };
+
     try {
       const res = await axiosInstance.post("/documents/postDocument", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -59,63 +91,125 @@ const PostDocument: React.FC<PostDocumentProps> = ({
   };
 
   return (
-    <div className="p-4 bg-black text-white">
-      <h2 className="text-2xl font-bold mb-4">Post Document</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input
-          type="text"
-          placeholder="Case ID"
-          className="border p-2 rounded bg-gray-900 text-white"
-          value={caseId || ""}
-          readOnly
-        />
-        <input
-          type="text"
-          placeholder="Patient ID (if not selected)"
-          className="border p-2 rounded bg-gray-900 text-white"
-          value={documentData.patientId}
-          onChange={(e) =>
-            setDocumentData({ ...documentData, patientId: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Document Name"
-          className="border p-2 rounded bg-gray-900 text-white"
-          value={documentData.documentName}
-          onChange={(e) =>
-            setDocumentData({ ...documentData, documentName: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Document Type (e.g., pdf, jpg)"
-          className="border p-2 rounded bg-gray-900 text-white"
-          value={documentData.documentType}
-          onChange={(e) =>
-            setDocumentData({ ...documentData, documentType: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Document URL"
-          className="border p-2 rounded bg-gray-900 text-white"
-          value={documentData.documentUrl}
-          onChange={(e) =>
-            setDocumentData({ ...documentData, documentUrl: e.target.value })
-          }
-          disabled={!!fileUrl} // Disable manual edit if fileUrl is provided
-        />
-      </div>
-      {documentData.documentUrl && (
-        <p className="mt-2 text-sm text-green-400">
-          Uploaded Image URL: {documentData.documentUrl}
-        </p>
-      )}
-      <Button onClick={makeDocument} className="mt-4 bg-purple-600 hover:bg-purple-700 text-white">
-        Post Document
-      </Button>
-    </div>
+    <Card className="w-full max-w-2xl mx-auto">
+      <CardHeader>
+        <CardTitle className="flex items-center">
+          <FileUp className="mr-2" /> Post New Document
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(makeDocument)} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Case ID */}
+              <FormField
+                control={form.control}
+                name="patientId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                      <Folder className="mr-2 h-4 w-4" /> Case ID
+                    </FormLabel>
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        placeholder="Case ID" 
+                        value={caseId || field.value} 
+                        readOnly 
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              {/* Patient ID */}
+              <FormField
+                control={form.control}
+                name="patientId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                      <User className="mr-2 h-4 w-4" /> Patient ID
+                    </FormLabel>
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        placeholder="Patient ID" 
+                        value={selectedPatientId || field.value}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Document Name */}
+              <FormField
+                control={form.control}
+                name="documentName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                      <FileText className="mr-2 h-4 w-4" /> Document Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter document name" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Document Type */}
+              <FormField
+                control={form.control}
+                name="documentType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                      <Tags className="mr-2 h-4 w-4" /> Document Type
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="pdf, jpg, etc." />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Document URL */}
+              <FormField
+                control={form.control}
+                name="documentUrl"
+                render={({ field }) => (
+                  <FormItem className="md:col-span-2">
+                    <FormLabel className="flex items-center">
+                      <FileUp className="mr-2 h-4 w-4" /> Document URL
+                    </FormLabel>
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        placeholder="Document URL" 
+                        disabled={!!fileUrl}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <Button 
+              type="submit" 
+              className="w-full mt-4"
+              disabled={!form.formState.isValid}
+            >
+              Post Document
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 };
 
