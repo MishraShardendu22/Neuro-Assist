@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import { Hospital, Report } from '../../model';
+import { Hospital, Patient, Report } from '../../model';
 import { apiResponse } from '../../util/apiReponse';
 
 const register = async (req: Request, res: Response) => {
@@ -154,4 +154,16 @@ const emergencyActivate = async (req: Request, res: Response) => {
   }
 };
 
-export { login, register, verifyHospital, emergencyActivate };
+const getAllPatients = async (req: Request, res: Response) => {
+  try {
+    const patients = await Patient.find();
+    return apiResponse(res, 200, 'Patients Found Successfully', patients);
+  } catch (err) {
+    console.error('Error getting all patients:', err);
+    if (!res.headersSent) {
+      return apiResponse(res, 500, 'Internal Server Error');
+    }
+  }
+}
+
+export { login, register, verifyHospital, emergencyActivate, getAllPatients };

@@ -36,6 +36,7 @@ import {
   login,
   register,
   verifyHospital,
+  getAllPatients,
   emergencyActivate,
 } from '../controllers/MainControllers/hospital.controller';
 
@@ -59,6 +60,7 @@ export {
   verifyPatient,
   getUniqueCase,
   getReportsOne,
+  getAllPatients,
   verifyHospital,
   getDocumentOne,
   updateDocument,
