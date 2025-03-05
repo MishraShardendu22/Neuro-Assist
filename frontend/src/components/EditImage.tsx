@@ -1,21 +1,10 @@
-import React, { useState } from "react";
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription 
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { 
-  ImagePlus, 
-  X, 
-  Camera, 
-  ImageIcon 
-} from "lucide-react";
-import { getEditorDefaults } from "@pqina/pintura";
-import { PinturaEditor } from "@pqina/react-pintura";
-import toast from "react-hot-toast";
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ImagePlus, X, Camera, ImageIcon } from 'lucide-react';
+import { getEditorDefaults } from '@pqina/pintura';
+import { PinturaEditor } from '@pqina/react-pintura';
+import toast from 'react-hot-toast';
 
 const EditImages: React.FC = () => {
   const [src, setSrc] = useState<string | undefined>(undefined);
@@ -30,14 +19,14 @@ const EditImages: React.FC = () => {
 
   const downloadImage = (imageBlob: Blob) => {
     const url = URL.createObjectURL(imageBlob);
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = url;
-    link.download = "edited-image.png";
+    link.download = 'edited-image.png';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    toast.success("Image downloaded successfully!");
+    toast.success('Image downloaded successfully!');
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -57,7 +46,7 @@ const EditImages: React.FC = () => {
     if (file && file.type.startsWith('image/')) {
       setSrc(URL.createObjectURL(file));
     } else {
-      toast.error("Please drop an image file");
+      toast.error('Please drop an image file');
     }
   };
 
@@ -72,9 +61,9 @@ const EditImages: React.FC = () => {
           Edit and enhance your images with ease
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent>
-        <div 
+        <div
           className={`
             w-full h-[500px] border-2 border-dashed rounded-lg flex flex-col 
             items-center justify-center transition-colors duration-300
@@ -86,7 +75,7 @@ const EditImages: React.FC = () => {
         >
           {!src ? (
             <div className="text-center">
-              <input 
+              <input
                 type="file"
                 accept="image/*"
                 capture="environment"
@@ -94,23 +83,19 @@ const EditImages: React.FC = () => {
                 className="hidden"
                 id="image-upload"
               />
-              <label 
-                htmlFor="image-upload" 
+              <label
+                htmlFor="image-upload"
                 className="
                   flex flex-col items-center justify-center cursor-pointer
                   p-6 rounded-lg hover:bg-gray-900 transition-colors
                 "
               >
                 <ImagePlus className="w-12 h-12 text-primary mb-4" />
-                <p className="text-white mb-2">
-                  Drag and drop an image or click to upload
-                </p>
-                <p className="text-gray-400 text-sm">
-                  Supports: PNG, JPG, WEBP
-                </p>
+                <p className="text-white mb-2">Drag and drop an image or click to upload</p>
+                <p className="text-gray-400 text-sm">Supports: PNG, JPG, WEBP</p>
               </label>
               <div className="mt-4 flex justify-center gap-4">
-                <Button 
+                <Button
                   variant="outline"
                   className="bg-gray-900 text-white border-gray-800 hover:bg-gray-800"
                 >
@@ -132,8 +117,8 @@ const EditImages: React.FC = () => {
                 }}
                 className="w-full h-full"
               />
-              <Button 
-                variant="destructive" 
+              <Button
+                variant="destructive"
                 size="icon"
                 className="absolute top-4 right-4 z-50"
                 onClick={() => setSrc(undefined)}

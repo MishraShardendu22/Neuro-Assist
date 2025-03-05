@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import axiosInstance from "@/lib/axiosInstance";
+import { useEffect, useState } from 'react';
+import axiosInstance from '@/lib/axiosInstance';
 
 interface Case {
   _id: string;
@@ -16,7 +16,7 @@ const HistoryHospital: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
+    const storedToken = localStorage.getItem('token');
     setToken(storedToken);
   }, []);
 
@@ -28,19 +28,15 @@ const HistoryHospital: React.FC = () => {
 
   const getAllCases = async () => {
     try {
-      const response = await axiosInstance.get(
-        "/cases/getAllCases",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axiosInstance.get('/cases/getAllCases', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
       setCases(response.data.Data);
-      
     } catch (error) {
-      console.error("Error retrieving cases:", error);
+      console.error('Error retrieving cases:', error);
     }
   };
 
@@ -49,12 +45,12 @@ const HistoryHospital: React.FC = () => {
       await axiosInstance.delete(`/cases/deleteCase/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
       setCases((prevCases) => prevCases.filter((c) => c._id !== id));
     } catch (error) {
-      console.error("Error deleting case:", error);
+      console.error('Error deleting case:', error);
     }
   };
 
@@ -66,13 +62,13 @@ const HistoryHospital: React.FC = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
       setCases((prevCases) => prevCases.map((c) => (c._id === id ? response.data.Data : c)));
     } catch (error) {
-      console.error("Error updating case:", error);
+      console.error('Error updating case:', error);
     }
   };
 
@@ -97,7 +93,7 @@ const HistoryHospital: React.FC = () => {
                 </span>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => updateCase(c._id, "Approved")}
+                    onClick={() => updateCase(c._id, 'Approved')}
                     className="bg-blue-500 text-white px-2 py-1 rounded"
                   >
                     Approve

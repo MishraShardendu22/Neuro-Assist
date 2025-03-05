@@ -1,42 +1,29 @@
-import React, { useEffect } from "react";
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription 
-} from "@/components/ui/card";
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { 
-  FileText, 
-  Stethoscope, 
-  Calendar, 
-  Droplet, 
-  HeartPulse, 
-  PlusCircle
-} from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import axiosInstance from "@/lib/axiosInstance";
-import toast from "react-hot-toast";
+import React, { useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { FileText, Stethoscope, Calendar, Droplet, HeartPulse, PlusCircle } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import axiosInstance from '@/lib/axiosInstance';
+import toast from 'react-hot-toast';
 
 // Zod validation schema
 const reportSchema = z.object({
-  timeOfLastNormal: z.string().min(1, "Time of last normal is required"),
+  timeOfLastNormal: z.string().min(1, 'Time of last normal is required'),
   symptoms: z.string(),
-  BP: z.string().min(1, "Blood Pressure is required"),
-  HR: z.string().min(1, "Heart Rate is required"),
-  O2_Saturation: z.string().min(1, "O2 Saturation is required"),
+  BP: z.string().min(1, 'Blood Pressure is required'),
+  HR: z.string().min(1, 'Heart Rate is required'),
+  O2_Saturation: z.string().min(1, 'O2 Saturation is required'),
   documentId: z.string().optional(),
 });
 
@@ -46,37 +33,33 @@ interface PostReportProps {
   documentId?: string | null;
 }
 
-const PostReport: React.FC<PostReportProps> = ({
-  selectedPatientId,
-  documentId,
-  caseId,
-}) => {
+const PostReport: React.FC<PostReportProps> = ({ selectedPatientId, documentId, caseId }) => {
   // Initialize form with zod resolver
   const form = useForm<z.infer<typeof reportSchema>>({
     resolver: zodResolver(reportSchema),
     defaultValues: {
-      timeOfLastNormal: "",
-      symptoms: "",
-      BP: "",
-      HR: "",
-      O2_Saturation: "",
-      documentId: documentId || "",
+      timeOfLastNormal: '',
+      symptoms: '',
+      BP: '',
+      HR: '',
+      O2_Saturation: '',
+      documentId: documentId || '',
     },
   });
 
   useEffect(() => {
     if (documentId) {
-      form.setValue("documentId", documentId);
+      form.setValue('documentId', documentId);
     }
   }, [documentId, form]);
 
   const makeReport = async (data: z.infer<typeof reportSchema>) => {
     if (!selectedPatientId) {
-      toast.error("Please select a patient for the report");
+      toast.error('Please select a patient for the report');
       return;
     }
     if (!caseId) {
-      toast.error("Please create a case before posting a report");
+      toast.error('Please create a case before posting a report');
       return;
     }
     const payload = {
@@ -84,19 +67,19 @@ const PostReport: React.FC<PostReportProps> = ({
       patientId: selectedPatientId,
       documentId: data.documentId,
       timeOfLastNormal: data.timeOfLastNormal,
-      symptoms: data.symptoms.split(",").map((symptom) => symptom.trim()),
+      symptoms: data.symptoms.split(',').map((symptom) => symptom.trim()),
       BP: data.BP,
       HR: data.HR,
       O2_Saturation: data.O2_Saturation,
     };
     try {
-      await axiosInstance.post("/reports/postReport", payload, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      await axiosInstance.post('/reports/postReport', payload, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
-      toast.success("Report posted successfully!");
+      toast.success('Report posted successfully!');
     } catch (error) {
-      console.error("Error posting report:", error);
-      toast.error("Failed to post report");
+      console.error('Error posting report:', error);
+      toast.error('Failed to post report');
     }
   };
 
@@ -111,7 +94,7 @@ const PostReport: React.FC<PostReportProps> = ({
           Enter detailed medical report information
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(makeReport)} className="space-y-4">
@@ -244,8 +227,8 @@ const PostReport: React.FC<PostReportProps> = ({
               />
             </div>
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-primary hover:bg-primary/90"
               disabled={!selectedPatientId || !caseId}
             >

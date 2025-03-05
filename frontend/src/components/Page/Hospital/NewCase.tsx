@@ -1,30 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
-} from "@/components/ui/tabs";
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
-import { 
-  FileText, 
-  FileUp, 
-  Folder, 
-  NotebookPen, 
-  Image 
-} from "lucide-react";
-import toast from "react-hot-toast";
-import CreateCase from "../../Case";
-import PostReport from "../../Reports";
-import EditImages from "../../EditImage";
-import PostDocument from "../../PostDocuments";
-import { PickerOverlay } from "filestack-react";
+import React, { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FileText, FileUp, Folder, NotebookPen, Image } from 'lucide-react';
+import toast from 'react-hot-toast';
+import CreateCase from '../../Case';
+import PostReport from '../../Reports';
+import EditImages from '../../EditImage';
+import PostDocument from '../../PostDocuments';
+import { PickerOverlay } from 'filestack-react';
 
 const WorkflowApp: React.FC = () => {
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
@@ -35,11 +19,21 @@ const WorkflowApp: React.FC = () => {
   const apiKey = import.meta.env.VITE_FILESTACK_API_KEY as string;
   const options = {
     accept: [
-      ".pdf", ".doc", ".csv", ".ppt", ".txt", 
-      ".xls", ".pptx", ".docx", ".xlsx", 
-      "image/*", "video/*", "image/png", "image/jpeg"
+      '.pdf',
+      '.doc',
+      '.csv',
+      '.ppt',
+      '.txt',
+      '.xls',
+      '.pptx',
+      '.docx',
+      '.xlsx',
+      'image/*',
+      'video/*',
+      'image/png',
+      'image/jpeg',
     ],
-    fromSources: ["url", "camera", "local_file_system"],
+    fromSources: ['url', 'camera', 'local_file_system'],
     transformations: {
       crop: true,
       circle: true,
@@ -47,54 +41,54 @@ const WorkflowApp: React.FC = () => {
     },
     maxFiles: 5,
     storeTo: {
-      location: "s3",
+      location: 's3',
     },
   };
 
   const onSuccess = (result: any) => {
-    console.log("Upload success:", result);
+    console.log('Upload success:', result);
     if (result.filesUploaded && result.filesUploaded.length > 0) {
       const uploadedUrl = result.filesUploaded[0].url;
-      toast.success("File uploaded successfully!");
+      toast.success('File uploaded successfully!');
       setFileUrl(uploadedUrl);
     }
   };
 
   const onError = (error: any) => {
-    console.error("Upload error:", error);
-    toast.error("File upload failed");
+    console.error('Upload error:', error);
+    toast.error('File upload failed');
   };
 
   return (
     <div className="min-h-screen bg-black text-white">
       <Tabs defaultValue="createCase" className="w-full">
         <TabsList className="grid w-full grid-cols-5 bg-gray-900 p-1 rounded-lg gap-1">
-          <TabsTrigger 
-            value="createCase" 
+          <TabsTrigger
+            value="createCase"
             className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             <NotebookPen className="w-4 h-4" /> Create Case
           </TabsTrigger>
-          <TabsTrigger 
-            value="postReport" 
+          <TabsTrigger
+            value="postReport"
             className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             <FileText className="w-4 h-4" /> Post Report
           </TabsTrigger>
-          <TabsTrigger 
-            value="postDocument" 
+          <TabsTrigger
+            value="postDocument"
             className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             <Folder className="w-4 h-4" /> Post Document
           </TabsTrigger>
-          <TabsTrigger 
-            value="uploadFile" 
+          <TabsTrigger
+            value="uploadFile"
             className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             <FileUp className="w-4 h-4" /> Upload File
           </TabsTrigger>
-          <TabsTrigger 
-            value="editImages" 
+          <TabsTrigger
+            value="editImages"
             className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             <Image className="w-4 h-4" /> Edit Images
@@ -126,9 +120,9 @@ const WorkflowApp: React.FC = () => {
                 <CardTitle className="text-white">Post Report</CardTitle>
               </CardHeader>
               <CardContent>
-                <PostReport 
-                  selectedPatientId={selectedPatientId} 
-                  caseId={caseId} 
+                <PostReport
+                  selectedPatientId={selectedPatientId}
+                  caseId={caseId}
                   documentId={documentId}
                 />
               </CardContent>

@@ -1,39 +1,28 @@
-import React, { useEffect } from "react";
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { 
-  FileUp, 
-  FileText, 
-  Tags, 
-  User, 
-  Folder 
-} from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axiosInstance from "@/lib/axiosInstance";
-import toast from "react-hot-toast";
+import React, { useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { FileUp, FileText, Tags, User, Folder } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axiosInstance from '@/lib/axiosInstance';
+import toast from 'react-hot-toast';
 
 // Zod schema for form validation
 const documentSchema = z.object({
   patientId: z.string().optional(),
-  documentUrl: z.string().url("Invalid URL"),
-  documentType: z.string().min(1, "Document type is required"),
-  documentName: z.string().min(1, "Document name is required")
+  documentUrl: z.string().url('Invalid URL'),
+  documentType: z.string().min(1, 'Document type is required'),
+  documentName: z.string().min(1, 'Document name is required'),
 });
 
 interface PostDocumentProps {
@@ -52,41 +41,41 @@ const PostDocument: React.FC<PostDocumentProps> = ({
   const form = useForm({
     resolver: zodResolver(documentSchema),
     defaultValues: {
-      patientId: selectedPatientId || "",
-      documentUrl: fileUrl || "",
-      documentType: "",
-      documentName: ""
-    }
+      patientId: selectedPatientId || '',
+      documentUrl: fileUrl || '',
+      documentType: '',
+      documentName: '',
+    },
   });
 
   // Update form when fileUrl changes
   useEffect(() => {
     if (fileUrl) {
-      form.setValue("documentUrl", fileUrl);
+      form.setValue('documentUrl', fileUrl);
     }
   }, [fileUrl, form]);
 
   const makeDocument = async (data: z.infer<typeof documentSchema>) => {
     if (!data.documentUrl) {
-      toast.error("Please upload an image to obtain a document URL");
+      toast.error('Please upload an image to obtain a document URL');
       return;
     }
 
     const payload = {
       caseId: caseId,
-      ...data
+      ...data,
     };
 
     try {
-      const res = await axiosInstance.post("/documents/postDocument", payload, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      const res = await axiosInstance.post('/documents/postDocument', payload, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       const newDocumentId = res.data.Data._id;
       toast.success(`Document posted successfully! (Document ID: ${newDocumentId})`);
       onDocumentCreated(newDocumentId);
     } catch (error) {
-      console.error("Error posting document:", error);
-      toast.error("Failed to post document");
+      console.error('Error posting document:', error);
+      toast.error('Failed to post document');
     }
   };
 
@@ -111,11 +100,11 @@ const PostDocument: React.FC<PostDocumentProps> = ({
                       <Folder className="mr-2 h-4 w-4" /> Case ID
                     </FormLabel>
                     <FormControl>
-                      <Input 
-                        {...field} 
-                        placeholder="Case ID" 
-                        value={caseId || field.value} 
-                        readOnly 
+                      <Input
+                        {...field}
+                        placeholder="Case ID"
+                        value={caseId || field.value}
+                        readOnly
                       />
                     </FormControl>
                   </FormItem>
@@ -132,9 +121,9 @@ const PostDocument: React.FC<PostDocumentProps> = ({
                       <User className="mr-2 h-4 w-4" /> Patient ID
                     </FormLabel>
                     <FormControl>
-                      <Input 
-                        {...field} 
-                        placeholder="Patient ID" 
+                      <Input
+                        {...field}
+                        placeholder="Patient ID"
                         value={selectedPatientId || field.value}
                       />
                     </FormControl>
@@ -187,11 +176,7 @@ const PostDocument: React.FC<PostDocumentProps> = ({
                       <FileUp className="mr-2 h-4 w-4" /> Document URL
                     </FormLabel>
                     <FormControl>
-                      <Input 
-                        {...field} 
-                        placeholder="Document URL" 
-                        disabled={!!fileUrl}
-                      />
+                      <Input {...field} placeholder="Document URL" disabled={!!fileUrl} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -199,11 +184,7 @@ const PostDocument: React.FC<PostDocumentProps> = ({
               />
             </div>
 
-            <Button 
-              type="submit" 
-              className="w-full mt-4"
-              disabled={!form.formState.isValid}
-            >
+            <Button type="submit" className="w-full mt-4" disabled={!form.formState.isValid}>
               Post Document
             </Button>
           </form>

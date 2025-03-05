@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  LogOut,
-  UserIcon,
-  HistoryIcon,
-  FilePlusIcon,
-  HeartPulseIcon,
-} from 'lucide-react';
+import { LogOut, UserIcon, HistoryIcon, FilePlusIcon, HeartPulseIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserStore } from '@/components/store/userStore';

@@ -1,42 +1,48 @@
-import { 
-  Bell, 
-  Send, 
-  AlertTriangle, 
-  HeartPulse, 
-  Stethoscope, 
-  Clock, 
-  Activity, 
-  Waves 
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import toast from "react-hot-toast";
-import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import axiosInstance from "@/lib/axiosInstance";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Bell,
+  Send,
+  AlertTriangle,
+  HeartPulse,
+  Stethoscope,
+  Clock,
+  Activity,
+  Waves,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import toast from 'react-hot-toast';
+import { useState, useEffect } from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import axiosInstance from '@/lib/axiosInstance';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Calendar } from '@/components/ui/calendar';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 
 const HomeHospital = () => {
   const [notifications, setNotifications] = useState<string[]>([]);
-  const [newNotification, setNewNotification] = useState("");
+  const [newNotification, setNewNotification] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [caseId, setCaseId] = useState("");
-  const [patientId, setPatientId] = useState("");
-  const [BP, setBP] = useState("");
-  const [HR, setHR] = useState("");
-  const [O2Saturation, setO2Saturation] = useState("");
+  const [caseId, setCaseId] = useState('');
+  const [patientId, setPatientId] = useState('');
+  const [BP, setBP] = useState('');
+  const [HR, setHR] = useState('');
+  const [O2Saturation, setO2Saturation] = useState('');
   const [timeOfLastNormal, setTimeOfLastNormal] = useState<Date | undefined>(undefined);
-  const [symptoms, setSymptoms] = useState("");
-  const [hours, setHours] = useState("00");
-  const [minutes, setMinutes] = useState("00");
+  const [symptoms, setSymptoms] = useState('');
+  const [hours, setHours] = useState('00');
+  const [minutes, setMinutes] = useState('00');
 
   useEffect(() => {
     fetchNotifications();
@@ -53,74 +59,82 @@ const HomeHospital = () => {
 
   const fetchNotifications = async () => {
     try {
-      const response = await axiosInstance.get("/notification/all", {
+      const response = await axiosInstance.get('/notification/all', {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
       setNotifications(response.data.Data.notifications.reverse());
     } catch (error) {
       console.log(error);
-      toast.error("Failed to fetch notifications");
+      toast.error('Failed to fetch notifications');
     }
   };
 
   const sendNotification = async () => {
     if (!newNotification.trim()) {
-      toast.error("Notification cannot be empty");
+      toast.error('Notification cannot be empty');
       return;
     }
     try {
       await axiosInstance.post(
-        "/notification/new",
+        '/notification/new',
         { notification: newNotification },
         {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         }
       );
-      toast.success("Notification sent successfully");
-      setNewNotification("");
+      toast.success('Notification sent successfully');
+      setNewNotification('');
       fetchNotifications();
     } catch (error) {
       console.log(error);
-      toast.error("Failed to send notification");
+      toast.error('Failed to send notification');
     }
   };
 
   const triggerEmergency = async () => {
-    if (!caseId || !patientId || !BP || !HR || !O2Saturation || !timeOfLastNormal || !symptoms.trim()) {
-      toast.error("All fields are required!");
+    if (
+      !caseId ||
+      !patientId ||
+      !BP ||
+      !HR ||
+      !O2Saturation ||
+      !timeOfLastNormal ||
+      !symptoms.trim()
+    ) {
+      toast.error('All fields are required!');
       return;
     }
     try {
       await axiosInstance.post(
-        "/hospital/emergencyActivate",
+        '/hospital/emergencyActivate',
         {
           caseId,
           patientId,
           BP,
           HR,
-          symptoms: symptoms.split(",").map((s) => s.trim()),
+          symptoms: symptoms.split(',').map((s) => s.trim()),
           documentId: `doc_${Date.now()}`,
           O2_Saturation: O2Saturation,
           timeOfLastNormal: timeOfLastNormal.toISOString(),
         },
         {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         }
       );
-      toast.success("Emergency Activated!");
+      toast.success('Emergency Activated!');
       setIsModalOpen(false);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to activate emergency!");
+      toast.error('Failed to activate emergency!');
     }
   };
 
@@ -144,8 +158,8 @@ const HomeHospital = () => {
                 onChange={(e) => setNewNotification(e.target.value)}
                 className="flex-grow"
               />
-              <Button 
-                onClick={sendNotification} 
+              <Button
+                onClick={sendNotification}
                 variant="secondary"
                 className="flex items-center space-x-2"
               >
@@ -153,15 +167,12 @@ const HomeHospital = () => {
                 <span>Send</span>
               </Button>
             </div>
-            <div 
-              className={`border rounded-lg p-2 scrollbar-thin scrollbar-track-muted/50 scrollbar-thumb-primary/50 ${notifications.length > 3 ? "max-h-[400px] overflow-y-auto" : ""}`}
+            <div
+              className={`border rounded-lg p-2 scrollbar-thin scrollbar-track-muted/50 scrollbar-thumb-primary/50 ${notifications.length > 3 ? 'max-h-[400px] overflow-y-auto' : ''}`}
             >
               {notifications.length > 0 ? (
                 notifications.map((notif, index) => (
-                  <div 
-                    key={index} 
-                    className="bg-muted/50 rounded-md p-2 mb-2 last:mb-0 shadow-sm"
-                  >
+                  <div key={index} className="bg-muted/50 rounded-md p-2 mb-2 last:mb-0 shadow-sm">
                     {notif}
                   </div>
                 ))
@@ -187,12 +198,12 @@ const HomeHospital = () => {
           <CardContent className="space-y-4">
             <div className="bg-muted/50 rounded-lg p-4">
               <p className="text-foreground mb-4">
-                Our hospital is a leading healthcare provider known for cutting-edge medical technology 
-                and experienced professionals committed to patient care and well-being.
+                Our hospital is a leading healthcare provider known for cutting-edge medical
+                technology and experienced professionals committed to patient care and well-being.
               </p>
-              <Button 
-                onClick={() => setIsModalOpen(true)} 
-                variant="destructive" 
+              <Button
+                onClick={() => setIsModalOpen(true)}
+                variant="destructive"
                 className="w-full flex items-center justify-center space-x-2"
               >
                 <AlertTriangle className="w-5 h-5" />
@@ -221,10 +232,10 @@ const HomeHospital = () => {
                 <Stethoscope className="w-4 h-4 text-muted-foreground" />
                 <span>Case ID</span>
               </Label>
-              <Input 
-                placeholder="Enter Case ID" 
-                value={caseId} 
-                onChange={(e) => setCaseId(e.target.value)} 
+              <Input
+                placeholder="Enter Case ID"
+                value={caseId}
+                onChange={(e) => setCaseId(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -232,10 +243,10 @@ const HomeHospital = () => {
                 <HeartPulse className="w-4 h-4 text-muted-foreground" />
                 <span>Patient ID</span>
               </Label>
-              <Input 
-                placeholder="Enter Patient ID" 
-                value={patientId} 
-                onChange={(e) => setPatientId(e.target.value)} 
+              <Input
+                placeholder="Enter Patient ID"
+                value={patientId}
+                onChange={(e) => setPatientId(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -243,22 +254,14 @@ const HomeHospital = () => {
                 <Activity className="w-4 h-4 text-muted-foreground" />
                 <span>Blood Pressure</span>
               </Label>
-              <Input 
-                placeholder="BP" 
-                value={BP} 
-                onChange={(e) => setBP(e.target.value)} 
-              />
+              <Input placeholder="BP" value={BP} onChange={(e) => setBP(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label className="flex items-center space-x-2">
                 <Waves className="w-4 h-4 text-muted-foreground" />
                 <span>Heart Rate</span>
               </Label>
-              <Input 
-                placeholder="HR" 
-                value={HR} 
-                onChange={(e) => setHR(e.target.value)} 
-              />
+              <Input placeholder="HR" value={HR} onChange={(e) => setHR(e.target.value)} />
             </div>
             <div className="col-span-2 space-y-2">
               <Label className="flex items-center space-x-2">
@@ -270,15 +273,15 @@ const HomeHospital = () => {
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
-                      variant={"outline"}
+                      variant={'outline'}
                       className={cn(
-                        "w-[240px] justify-start text-left font-normal",
-                        !timeOfLastNormal && "text-muted-foreground"
+                        'w-[240px] justify-start text-left font-normal',
+                        !timeOfLastNormal && 'text-muted-foreground'
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {timeOfLastNormal ? (
-                        format(timeOfLastNormal, "PPP")
+                        format(timeOfLastNormal, 'PPP')
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -295,27 +298,29 @@ const HomeHospital = () => {
                 </Popover>
 
                 {/* Time Selectors */}
-                <select 
-                  value={hours} 
-                  onChange={(e) => setHours(e.target.value)} 
+                <select
+                  value={hours}
+                  onChange={(e) => setHours(e.target.value)}
                   className="border bg-black/100 rounded p-2"
                 >
-                  {Array.from({length: 24}, (_, i) => 
-                    String(i).padStart(2, '0')
-                  ).map(hour => (
-                    <option key={hour} value={hour}>{hour}</option>
+                  {Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0')).map((hour) => (
+                    <option key={hour} value={hour}>
+                      {hour}
+                    </option>
                   ))}
                 </select>
-                <select 
-                  value={minutes} 
-                  onChange={(e) => setMinutes(e.target.value)} 
+                <select
+                  value={minutes}
+                  onChange={(e) => setMinutes(e.target.value)}
                   className="border bg-black/100 rounded p-2"
                 >
-                  {Array.from({length: 60}, (_, i) => 
-                    String(i).padStart(2, '0')
-                  ).map(minute => (
-                    <option key={minute} value={minute}>{minute}</option>
-                  ))}
+                  {Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0')).map(
+                    (minute) => (
+                      <option key={minute} value={minute}>
+                        {minute}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
             </div>
@@ -324,10 +329,10 @@ const HomeHospital = () => {
                 <Waves className="w-4 h-4 text-muted-foreground" />
                 <span>O2 Saturation</span>
               </Label>
-              <Input 
-                placeholder="O2 Saturation" 
-                value={O2Saturation} 
-                onChange={(e) => setO2Saturation(e.target.value)} 
+              <Input
+                placeholder="O2 Saturation"
+                value={O2Saturation}
+                onChange={(e) => setO2Saturation(e.target.value)}
               />
             </div>
             <div className="col-span-2 space-y-2">
@@ -335,16 +340,16 @@ const HomeHospital = () => {
                 <AlertTriangle className="w-4 h-4 text-muted-foreground" />
                 <span>Symptoms</span>
               </Label>
-              <Textarea 
-                placeholder="Enter symptoms (comma-separated)" 
-                value={symptoms} 
-                onChange={(e) => setSymptoms(e.target.value)} 
+              <Textarea
+                placeholder="Enter symptoms (comma-separated)"
+                value={symptoms}
+                onChange={(e) => setSymptoms(e.target.value)}
               />
             </div>
           </div>
-          <Button 
-            onClick={triggerEmergency} 
-            variant="destructive" 
+          <Button
+            onClick={triggerEmergency}
+            variant="destructive"
             className="w-full flex items-center justify-center space-x-2"
           >
             <AlertTriangle className="w-5 h-5" />

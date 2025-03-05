@@ -164,6 +164,6 @@ const getAllPatients = async (req: Request, res: Response) => {
       return apiResponse(res, 500, 'Internal Server Error');
     }
   }
-}
+};
 
 export { login, register, verifyHospital, emergencyActivate, getAllPatients };
